@@ -60,6 +60,15 @@ mysql = MySQL(app)
 # Create one shared chatbot engine and pass the DB connection to it
 chatbot_engine = ChatbotEngine(mysql)
 
+
+@app.route('/test-db')
+def test_db():
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT 1")
+        return "DB CONNECTED"
+    except Exception as e:
+        return str(e)
 # ============================================================
 # Helper Functions
 # ============================================================
