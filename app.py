@@ -441,7 +441,7 @@ def dashboard():
     today   = date.today()
 
     print("\n=================================================")
-    print("📊 DASHBOARD LOADED")
+    print("DASHBOARD LOADED")
     print("=================================================")
     print(f"[DASHBOARD] User ID: {user_id}")
 
@@ -1699,7 +1699,5 @@ def clear_chat():
 # Run the App
 # ============================================================
 
-if __name__ == '__main__':
-    # debug=True gives helpful error pages and auto-reloads on code changes.
-    # Turn this OFF before deploying to production.
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
