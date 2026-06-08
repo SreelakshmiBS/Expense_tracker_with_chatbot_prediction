@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartExpenseAI — Precision Finance Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+:root{
+  --cream:    #f8f5f0;
+  --cream-dk: #f0ece4;
+  --paper:    #fdfcf9;
+  --ink:      #16140f;
+  --ink-2:    #2c2820;
+  --ink-3:    #5a5347;
+  --ink-4:    #9c9488;
+
+  --gold:     #c9a96e;
+  --gold-dk:  #9d7c47;
+  --gold-lt:  #e0c27a;
+  --gold-pale:#f5eedf;
+  --gold-dim: rgba(201,169,110,.12);
+
+  --green:    #2d6a4f;
+  --green-bg: #eaf4ef;
+  --red:      #a83232;
+  --red-bg:   #faeaea;
+  --steel:    #3d5a80;
+  --steel-bg: #eaf0f8;
+
+  --sh-sm: 0 2px 16px rgba(22,20,15,.05);
+  --sh-md: 0 10px 40px rgba(22,20,15,.09);
+  --sh-lg: 0 28px 80px rgba(22,20,15,.13);
+  --sh-gold: 0 8px 32px rgba(201,169,110,.22);
+
+  --r: 8px;
+  --rl: 16px;
+  --rx: 24px;
+}
+
+body{
+  font-family:'Jost',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  overflow-x:hidden;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── UTILITY ── */
+.serif{font-family:'Playfair Display',serif}
+.container{max-width:1160px;margin:0 auto;padding:0 40px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:0;
+  transition:all .35s ease;
+}
+nav.scrolled{
+  background:rgba(253,252,249,.93);
+  backdrop-filter:blur(18px) saturate(1.6);
+  border-bottom:1px solid rgba(201,169,110,.18);
+  box-shadow:var(--sh-sm);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  height:68px;
+}
+.nav-brand{
+  font-family:'Playfair Display',serif;
+  font-size:20px;font-weight:500;
+  color:var(--ink);text-decoration:none;letter-spacing:-.2px;
+}
+.nav-brand span{color:var(--gold-dk)}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none}
+.nav-links a{
+  padding:7px 16px;font-size:13px;font-weight:400;
+  color:var(--ink-3);text-decoration:none;
+  border-radius:var(--r);transition:all .15s;letter-spacing:.2px;
+}
+.nav-links a:hover{color:var(--gold-dk);background:var(--gold-pale)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-login{
+  font-size:13px;color:var(--ink-3);text-decoration:none;
+  padding:8px 14px;border-radius:var(--r);transition:all .15s;
+}
+.nav-login:hover{color:var(--ink);background:var(--cream)}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:500;
+  padding:10px 24px;border-radius:var(--r);cursor:pointer;border:none;
+  text-decoration:none;transition:all .22s;letter-spacing:.3px;
+  background:var(--ink);color:var(--paper);
+  box-shadow:0 4px 14px rgba(22,20,15,.18);
+}
+.btn-primary:hover{background:var(--ink-2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(22,20,15,.22)}
+.btn-outline{
+  display:inline-flex;align-items:center;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:400;
+  padding:10px 22px;border-radius:var(--r);cursor:pointer;
+  text-decoration:none;transition:all .22s;letter-spacing:.2px;
+  background:transparent;color:var(--ink-3);
+  border:1px solid rgba(22,20,15,.15);
+}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold-dk);background:var(--gold-pale)}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:flex;align-items:center;
+  background:var(--paper);
+  position:relative;
+  overflow:hidden;
+  padding:100px 0 60px;
+}
+
+/* Grain texture overlay */
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;opacity:.6;
+}
+
+/* Diagonal gold accent */
+.hero::after{
+  content:'';
+  position:absolute;
+  right:-80px;top:-120px;
+  width:520px;height:520px;
+  background:radial-gradient(ellipse at 60% 40%, rgba(201,169,110,.10) 0%, transparent 65%);
+  pointer-events:none;
+}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.1fr 1fr;
+  align-items:center;gap:64px;
+  position:relative;z-index:1;
+}
+
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+  color:var(--gold-dk);margin-bottom:28px;
+}
+.hero-tag::before{
+  content:'';width:28px;height:1px;background:var(--gold);
+}
+
+.hero-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(42px,5.5vw,68px);
+  font-weight:500;line-height:1.09;
+  letter-spacing:-.5px;color:var(--ink);
+  margin-bottom:24px;
+}
+.hero-heading em{
+  font-style:italic;
+  color:var(--gold-dk);
+  position:relative;
+}
+
+.hero-sub{
+  font-size:15.5px;font-weight:300;
+  color:var(--ink-3);line-height:1.8;
+  max-width:430px;margin-bottom:36px;
+}
+
+.hero-ctas{display:flex;align-items:center;gap:12px;margin-bottom:52px}
+
+.hero-proof{
+  display:flex;gap:36px;
+  padding-top:36px;
+  border-top:1px solid rgba(22,20,15,.08);
+}
+.proof-item{}
+.proof-num{
+  font-family:'Playfair Display',serif;
+  font-size:28px;font-weight:500;color:var(--ink);line-height:1;
+}
+.proof-num span{font-size:15px;color:var(--gold-dk);vertical-align:super}
+.proof-lbl{font-size:11px;color:var(--ink-4);margin-top:4px;letter-spacing:.3px}
+
+/* DASHBOARD MOCKUP */
+.hero-right{position:relative;padding:20px 20px 20px 0}
+
+.mockup-shell{
+  background:var(--paper);
+  border:1px solid rgba(22,20,15,.1);
+  border-radius:var(--rx);
+  box-shadow:var(--sh-lg);
+  overflow:hidden;
+  position:relative;
+}
+.mockup-shell::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-lt));
+}
+
+.mockup-topbar{
+  padding:14px 18px;
+  background:var(--cream);
+  border-bottom:1px solid rgba(22,20,15,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.topbar-dots{display:flex;gap:5px}
+.td{width:9px;height:9px;border-radius:50%}
+.td1{background:#e4796e}.td2{background:#e4c46e}.td3{background:#6ec47a}
+.topbar-title{font-size:11px;color:var(--ink-4);letter-spacing:.3px}
+.live-pill{
+  display:flex;align-items:center;gap:5px;
+  font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  color:var(--gold-dk);background:var(--gold-pale);
+  padding:3px 9px;border-radius:20px;
+}
+.live-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+.mockup-body{padding:18px}
+
+.mk-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.mk-kpi{
+  background:var(--cream);border:1px solid rgba(22,20,15,.07);
+  border-radius:var(--r);padding:12px 10px;
+  position:relative;overflow:hidden;
+}
+.mk-kpi-accent{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  border-radius:var(--r) var(--r) 0 0;
+}
+.mk-kpi-lbl{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-4);margin-bottom:5px}
+.mk-kpi-val{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:500;line-height:1;
+}
+.mk-kpi-hint{font-size:8px;color:var(--ink-4);margin-top:3px}
+
+.mk-label{font-size:9.5px;color:var(--ink-4);letter-spacing:.4px;margin-bottom:8px}
+.mk-bars{display:flex;align-items:flex-end;gap:3.5px;height:52px;margin-bottom:4px}
+.mk-bar{flex:1;border-radius:2px 2px 0 0}
+.mk-barlbls{display:flex;gap:3.5px}
+.mk-barlbl{flex:1;font-size:7px;color:var(--ink-4);text-align:center}
+
+.mk-ai{
+  background:var(--ink);border-radius:var(--r);
+  padding:11px 13px;display:flex;align-items:flex-start;gap:10px;margin-top:12px;
+}
+.mk-ai-bar{width:2px;height:100%;min-height:30px;background:var(--gold);border-radius:1px;flex-shrink:0}
+.mk-ai-text{font-size:10.5px;color:rgba(255,255,255,.7);line-height:1.55}
+.mk-ai-text strong{color:var(--gold-lt)}
+
+/* floating badge */
+.float-badge{
+  position:absolute;
+  background:var(--paper);
+  border:1px solid rgba(22,20,15,.1);
+  border-radius:12px;padding:10px 14px;
+  box-shadow:var(--sh-md);
+  display:flex;align-items:center;gap:10px;
+  white-space:nowrap;
+}
+.fb-a{top:24px;right:-24px;animation:floatY 5s ease-in-out infinite}
+.fb-b{bottom:36px;left:-24px;animation:floatY 5s ease-in-out infinite .7s}
+@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.fb-icon{
+  width:30px;height:30px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;
+}
+.fb-val{font-size:12.5px;font-weight:600;color:var(--ink)}
+.fb-sub{font-size:9.5px;color:var(--ink-4)}
+
+/* ── MARQUEE / TICKER ── */
+.ticker-section{
+  background:var(--cream);
+  border-top:1px solid rgba(22,20,15,.07);
+  border-bottom:1px solid rgba(22,20,15,.07);
+  padding:14px 0;overflow:hidden;
+}
+.ticker-track{
+  display:flex;gap:48px;
+  animation:marquee 28s linear infinite;
+  width:max-content;
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tick{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-4);white-space:nowrap}
+.tick-sep{width:3px;height:3px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* ── PROBLEM SECTION ── */
+.problem{
+  padding:110px 0;
+  background:var(--ink);
+  position:relative;overflow:hidden;
+}
+.problem::before{
+  content:'';
+  position:absolute;left:-100px;top:50%;transform:translateY(-50%);
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,.07) 0%,transparent 65%);
+  pointer-events:none;
+}
+.problem-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;
+}
+.problem-left{}
+.prob-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:20px;display:flex;align-items:center;gap:10px;
+}
+.prob-eyebrow::after{content:'';flex:1;height:1px;background:rgba(201,169,110,.3);max-width:60px}
+
+.problem-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,3.8vw,48px);
+  font-weight:500;line-height:1.15;
+  color:#fff;margin-bottom:20px;
+}
+.problem-heading em{font-style:italic;color:var(--gold-lt)}
+.problem-intro{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.52);line-height:1.82;
+}
+
+.prob-list{
+  display:flex;flex-direction:column;gap:0;
+  border-top:1px solid rgba(255,255,255,.07);
+  margin-top:8px;
+}
+.prob-item{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:22px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.prob-num{
+  font-family:'Playfair Display',serif;
+  font-size:11px;font-weight:400;
+  color:var(--gold);opacity:.5;
+  flex-shrink:0;padding-top:3px;letter-spacing:1px;
+}
+.prob-title{
+  font-size:14px;font-weight:500;color:rgba(255,255,255,.85);
+  margin-bottom:4px;
+}
+.prob-desc{font-size:13px;font-weight:300;color:rgba(255,255,255,.42);line-height:1.65}
+
+/* ── SOLUTION SECTION ── */
+.solution{
+  padding:110px 0;background:var(--paper);
+}
+.sol-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:60px;margin-bottom:72px;
+}
+.sol-heading-block{flex:1}
+.sol-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold-dk);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.sol-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.sol-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,3.8vw,50px);
+  font-weight:500;line-height:1.13;
+  color:var(--ink);
+}
+.sol-heading em{font-style:italic;color:var(--gold-dk)}
+.sol-sub-block{flex:1;padding-top:8px}
+.sol-sub{
+  font-size:15px;font-weight:300;color:var(--ink-3);line-height:1.82;
+}
+
+.features-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:rgba(22,20,15,.07);
+  border:1px solid rgba(22,20,15,.07);
+  border-radius:var(--rx);
+  overflow:hidden;
+}
+.feat{
+  background:var(--paper);
+  padding:36px 32px;
+  transition:background .22s;
+  position:relative;
+}
+.feat:hover{background:var(--cream)}
+.feat-num{
+  font-family:'Playfair Display',serif;
+  font-size:48px;font-weight:400;
+  color:rgba(22,20,15,.05);
+  line-height:1;margin-bottom:16px;
+  transition:color .22s;
+}
+.feat:hover .feat-num{color:rgba(201,169,110,.15)}
+.feat-icon-wrap{
+  width:40px;height:40px;border-radius:var(--r);
+  background:var(--gold-pale);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+  transition:background .22s;
+}
+.feat:hover .feat-icon-wrap{background:var(--gold)}
+.feat-icon-wrap svg{width:18px;height:18px;stroke:var(--gold-dk);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .22s}
+.feat:hover .feat-icon-wrap svg{stroke:var(--ink)}
+.feat-name{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:10px}
+.feat-desc{font-size:13.5px;font-weight:300;color:var(--ink-3);line-height:1.7}
+
+.feat-wide{
+  grid-column:span 2;
+  display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;
+}
+.fw-chart{display:flex;align-items:flex-end;gap:4px;height:56px;margin-bottom:12px}
+.fw-b{flex:1;border-radius:2px 2px 0 0}
+.fw-ai-block{
+  background:var(--ink);border-radius:var(--r);padding:14px 16px;
+  border-left:2px solid var(--gold);
+}
+.fw-ai-text{font-size:12px;color:rgba(255,255,255,.65);line-height:1.6}
+.fw-ai-text strong{color:var(--gold-lt)}
+
+/* ── ANALYTICS ── */
+.analytics{
+  padding:110px 0;
+  background:var(--cream);
+  position:relative;overflow:hidden;
+}
+.analytics::after{
+  content:'';
+  position:absolute;right:-100px;top:50%;transform:translateY(-50%);
+  width:480px;height:480px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,.08) 0%,transparent 68%);
+  pointer-events:none;
+}
+.analytics-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+
+.metrics-stack{display:flex;flex-direction:column;gap:12px}
+.metric-card{
+  background:var(--paper);
+  border:1px solid rgba(22,20,15,.07);
+  border-radius:var(--rl);padding:20px 22px;
+  transition:all .22s;
+  position:relative;overflow:hidden;
+}
+.metric-card::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;
+  width:3px;border-radius:0;
+}
+.mc-green::before{background:var(--green)}
+.mc-red::before{background:var(--red)}
+.mc-gold::before{background:var(--gold)}
+.mc-steel::before{background:var(--steel)}
+.metric-card:hover{box-shadow:var(--sh-md);transform:translateX(4px)}
+.metric-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.metric-left{display:flex;align-items:center;gap:10px}
+.metric-name{font-size:13.5px;font-weight:500}
+.metric-right{display:flex;align-items:baseline;gap:8px}
+.metric-val{
+  font-family:'Playfair Display',serif;
+  font-size:21px;font-weight:500;
+}
+.tag{font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500}
+.tag-up{color:var(--green);background:var(--green-bg)}
+.tag-dn{color:var(--red);background:var(--red-bg)}
+.tag-ai{color:var(--steel);background:var(--steel-bg)}
+.tag-wn{color:var(--gold-dk);background:var(--gold-pale)}
+.track{height:4px;background:rgba(22,20,15,.06);border-radius:2px;overflow:hidden}
+.fill{height:100%;border-radius:2px;transition:width 1.2s ease}
+
+.analytics-text{}
+.at-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold-dk);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.at-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.at-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(30px,3.5vw,46px);
+  font-weight:500;line-height:1.15;
+  color:var(--ink);margin-bottom:16px;
+}
+.at-heading em{font-style:italic;color:var(--gold-dk)}
+.at-sub{font-size:15px;font-weight:300;color:var(--ink-3);line-height:1.8;margin-bottom:28px}
+
+.insight-cards{display:flex;flex-direction:column;gap:10px}
+.insight-card{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:16px 18px;
+  background:var(--paper);
+  border:1px solid rgba(22,20,15,.07);
+  border-radius:var(--rl);
+  transition:all .2s;
+}
+.insight-card:hover{border-color:var(--gold);box-shadow:var(--sh-gold)}
+.ic-bar{width:3px;height:36px;border-radius:2px;flex-shrink:0;margin-top:2px}
+.ic-title{font-size:13.5px;font-weight:500;margin-bottom:3px}
+.ic-sub{font-size:12px;color:var(--ink-3);font-weight:300}
+
+/* ── CHATBOT ── */
+.chatbot-section{
+  padding:110px 0;background:var(--paper);
+}
+.chat-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+}
+
+.chat-window{
+  background:var(--paper);
+  border:1px solid rgba(22,20,15,.1);
+  border-radius:var(--rx);
+  box-shadow:var(--sh-lg);
+  overflow:hidden;
+}
+.chat-topbar{
+  padding:16px 20px;
+  background:var(--ink);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.chat-identity{display:flex;align-items:center;gap:12px}
+.chat-av{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold-pale),var(--gold));
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.chat-av-dot{width:12px;height:12px;border-radius:50%;background:var(--ink);opacity:.55}
+.ci-name{font-size:13px;font-weight:500;color:#fff;margin-bottom:2px}
+.ci-status{font-size:10px;color:var(--gold-lt);display:flex;align-items:center;gap:5px}
+.s-dot{width:5px;height:5px;border-radius:50%;background:#5db87a}
+.chat-clear{font-size:10px;color:rgba(255,255,255,.3);cursor:pointer;padding:4px 8px;border-radius:var(--r);transition:all .15s;border:none;background:none}
+.chat-clear:hover{color:rgba(255,255,255,.7);background:rgba(255,255,255,.07)}
+
+.chat-messages{
+  background:var(--cream);
+  padding:20px;display:flex;flex-direction:column;gap:14px;
+  min-height:260px;
+}
+.msg{max-width:88%}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end}
+.bubble{
+  padding:12px 15px;font-size:13px;line-height:1.6;border-radius:12px;
+}
+.msg.ai .bubble{
+  background:var(--paper);border:1px solid rgba(22,20,15,.08);
+  color:var(--ink);border-bottom-left-radius:3px;
+}
+.msg.user .bubble{background:var(--ink);color:#fff;border-bottom-right-radius:3px}
+.hi{color:var(--gold-dk);font-weight:500}
+.pos{color:var(--green);font-weight:500}
+.neg{color:var(--red);font-weight:500}
+.ts{font-size:9px;color:var(--ink-4);margin-top:4px;padding:0 2px}
+.msg.user .ts{text-align:right}
+
+.chat-inputbar{
+  padding:14px 16px;background:var(--paper);
+  border-top:1px solid rgba(22,20,15,.07);
+  display:flex;gap:8px;align-items:center;
+}
+.ci-field{
+  flex:1;background:var(--cream);border:1px solid rgba(22,20,15,.1);
+  border-radius:20px;padding:9px 16px;
+  font-size:12px;color:var(--ink-4);font-family:'Jost',sans-serif;
+}
+.ci-send-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;flex-shrink:0;border:none;
+  transition:all .15s;
+}
+.ci-send-btn:hover{background:var(--gold-dk)}
+
+.chat-text{}
+.ct-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold-dk);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.ct-eyebrow::before{content:'';width:24px;height:1px;background:var(--gold)}
+.ct-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(28px,3.2vw,42px);
+  font-weight:500;line-height:1.18;
+  color:var(--ink);margin-bottom:14px;
+}
+.ct-heading em{font-style:italic;color:var(--gold-dk)}
+.ct-sub{font-size:15px;font-weight:300;color:var(--ink-3);line-height:1.8;margin-bottom:28px}
+
+.chat-feat-list{display:flex;flex-direction:column;gap:10px}
+.cf{
+  display:flex;align-items:flex-start;gap:14px;
+  padding:14px 16px;
+  border:1px solid rgba(22,20,15,.08);
+  border-radius:var(--rl);
+  background:var(--cream);
+  transition:all .2s;
+}
+.cf:hover{border-color:var(--gold);background:var(--gold-pale)}
+.cf-mark{
+  width:36px;height:36px;border-radius:var(--r);
+  background:var(--gold-pale);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--gold-dk);flex-shrink:0;
+  transition:background .2s;
+}
+.cf:hover .cf-mark{background:var(--gold);color:var(--ink)}
+.cf-title{font-size:13.5px;font-weight:500;margin-bottom:3px}
+.cf-sub{font-size:12px;color:var(--ink-3);font-weight:300}
+
+/* ── CTA ── */
+.cta{
+  padding:110px 0;
+  background:var(--ink);
+  position:relative;overflow:hidden;
+  text-align:center;
+}
+.cta::before{
+  content:'';
+  position:absolute;top:-100px;left:50%;transform:translateX(-50%);
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(201,169,110,.09) 0%,transparent 65%);
+  pointer-events:none;
+}
+.cta-inner{position:relative;z-index:1;max-width:580px;margin:0 auto}
+.cta-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:10px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px;
+}
+.cta-tag::before,.cta-tag::after{content:'';width:24px;height:1px;background:rgba(201,169,110,.4)}
+.cta-heading{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,4.5vw,56px);
+  font-weight:500;color:#fff;line-height:1.12;
+  margin-bottom:16px;
+}
+.cta-heading em{color:var(--gold-lt);font-style:italic}
+.cta-sub{
+  font-size:15px;font-weight:300;
+  color:rgba(255,255,255,.45);
+  margin-bottom:36px;line-height:1.75;
+}
+.cta-btns{display:flex;align-items:center;justify-content:center;gap:12px}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Jost',sans-serif;font-size:13.5px;font-weight:500;
+  padding:13px 30px;border-radius:var(--r);cursor:pointer;border:none;
+  text-decoration:none;transition:all .22s;letter-spacing:.3px;
+  background:linear-gradient(135deg,var(--gold) 0%,var(--gold-lt) 55%,var(--gold) 100%);
+  background-size:200% 100%;
+  color:var(--ink-2);
+  box-shadow:0 6px 24px rgba(201,169,110,.32);
+}
+.btn-gold:hover{background-position:right center;box-shadow:0 10px 32px rgba(201,169,110,.42);transform:translateY(-1px)}
+.btn-ghost-dk{
+  display:inline-flex;align-items:center;
+  font-family:'Jost',sans-serif;font-size:13px;font-weight:400;
+  padding:13px 26px;border-radius:var(--r);
+  text-decoration:none;transition:all .22s;
+  background:transparent;color:rgba(255,255,255,.55);
+  border:1px solid rgba(255,255,255,.12);
+}
+.btn-ghost-dk:hover{color:#fff;border-color:rgba(201,169,110,.4);background:rgba(201,169,110,.07)}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--ink);
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:28px 0;
+  text-align:center;
+}
+.footer-brand{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:rgba(255,255,255,.35);
+  letter-spacing:-.1px;
+}
+.footer-brand span{color:var(--gold)}
+.footer-note{font-size:11px;color:rgba(255,255,255,.18);margin-top:6px}
+
+/* ── SCROLL REVEAL ── */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.09s}.d2{transition-delay:.18s}.d3{transition-delay:.27s}.d4{transition-delay:.36s}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .hero-grid,.problem-grid,.analytics-grid,.chat-grid{grid-template-columns:1fr}
+  .hero-right{display:none}
+  .features-grid{grid-template-columns:1fr 1fr}
+  .feat-wide{grid-column:span 2;grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero-sub{max-width:100%}
+  .sol-header{flex-direction:column;gap:24px}
+}
+@media(max-width:580px){
+  .container{padding:0 20px}
+  .features-grid{grid-template-columns:1fr}
+  .feat-wide{grid-column:span 1}
+  .mk-kpis{grid-template-columns:repeat(3,1fr)}
+  .hero-proof{gap:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="nav-brand serif">Smart<span>Expense</span>AI</a>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#analytics">Analytics</a></li>
+        <li><a href="#chatbot">AI Chat</a></li>
+      </ul>
+      <div class="nav-right">
+        <a href="/login" class="nav-login">Log in</a>
+        <a href="/register" class="btn-primary">Get Started</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="container">
+    <div class="hero-grid">
+
+      <div class="hero-left">
+        <div class="hero-tag rv">AI-Powered Finance Intelligence</div>
+        <h1 class="hero-heading rv d1">
+          The intelligent<br>way to master<br><em>your finances</em>
+        </h1>
+        <p class="hero-sub rv d2">
+          Traditional spreadsheets can't warn you before you overspend, predict your future, or answer your questions at midnight. SmartExpenseAI does all three — powered by conversational AI and machine learning built around your financial life.
+        </p>
+        <div class="hero-ctas rv d3">
+          <a href="/register" class="btn-primary">Start your finance journey</a>
+          <a href="#features" class="btn-outline">See How It Works</a>
+        </div>
+        <div class="hero-proof rv d4">
+          <div class="proof-item">
+            <div class="proof-num serif">₹2.4<span>Cr</span></div>
+            <div class="proof-lbl">Total expenses tracked</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-num serif">94<span>%</span></div>
+            <div class="proof-lbl">Forecast accuracy</div>
+          </div>
+          <div class="proof-item">
+            <div class="proof-num serif">6<span>×</span></div>
+            <div class="proof-lbl">Faster than spreadsheets</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right rv d2">
+        <div style="position:relative">
+
+          <div class="mockup-shell">
+            <div class="mockup-topbar">
+              <div class="topbar-dots">
+                <div class="td td1"></div><div class="td td2"></div><div class="td td3"></div>
+              </div>
+              <span class="topbar-title">June 2026 Overview</span>
+              <div class="live-pill"><span class="live-dot"></span>Live</div>
+            </div>
+
+            <div class="mockup-body">
+              <div class="mk-kpis">
+                <div class="mk-kpi">
+                  <div class="mk-kpi-accent" style="background:var(--gold)"></div>
+                  <div class="mk-kpi-lbl">Spent</div>
+                  <div class="mk-kpi-val" style="color:var(--gold-dk)">₹42.8k</div>
+                  <div class="mk-kpi-hint">of ₹60k budget</div>
+                </div>
+                <div class="mk-kpi">
+                  <div class="mk-kpi-accent" style="background:var(--green)"></div>
+                  <div class="mk-kpi-lbl">Saved</div>
+                  <div class="mk-kpi-val" style="color:var(--green)">₹17.2k</div>
+                  <div class="mk-kpi-hint">+6% vs target</div>
+                </div>
+                <div class="mk-kpi">
+                  <div class="mk-kpi-accent" style="background:var(--steel)"></div>
+                  <div class="mk-kpi-lbl">AI Forecast</div>
+                  <div class="mk-kpi-val" style="color:var(--steel)">₹46.2k</div>
+                  <div class="mk-kpi-hint">Next month</div>
+                </div>
+              </div>
+
+              <div class="mk-label">Monthly spending trend</div>
+              <div class="mk-bars">
+                <div class="mk-bar" style="height:58%;background:rgba(22,20,15,.09)"></div>
+                <div class="mk-bar" style="height:74%;background:rgba(22,20,15,.14)"></div>
+                <div class="mk-bar" style="height:51%;background:rgba(22,20,15,.09)"></div>
+                <div class="mk-bar" style="height:85%;background:rgba(22,20,15,.18)"></div>
+                <div class="mk-bar" style="height:67%;background:rgba(22,20,15,.14)"></div>
+                <div class="mk-bar" style="height:78%;background:var(--gold)"></div>
+                <div class="mk-bar" style="height:65%;background:var(--gold-pale);border:1.5px dashed var(--gold-dk)"></div>
+              </div>
+              <div class="mk-barlbls">
+                <span class="mk-barlbl">Jan</span><span class="mk-barlbl">Feb</span>
+                <span class="mk-barlbl">Mar</span><span class="mk-barlbl">Apr</span>
+                <span class="mk-barlbl">May</span>
+                <span class="mk-barlbl" style="color:var(--gold-dk);font-weight:500">Jun</span>
+                <span class="mk-barlbl">Jul</span>
+              </div>
+
+              <div class="mk-ai">
+                <div class="mk-ai-bar"></div>
+                <div class="mk-ai-text"><strong>AI tip:</strong> Dining out is ₹2,100 above your 6-month average. Cutting 2 meals weekly saves <strong>₹9,600 per year</strong>.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="problem-grid">
+
+      <div class="problem-left rv">
+        <div class="prob-eyebrow">The Problem</div>
+        <h2 class="problem-heading serif">
+          Why traditional tracking<br><em>fails you</em>
+        </h2>
+        <p class="problem-intro">
+          Most people discover they have overspent only at month-end — when the damage is already done. Pen-and-paper records, basic spreadsheets, and generic apps share the same fatal flaw: they record the past but offer nothing about the future.
+        </p>
+      </div>
+
+      <div class="prob-list rv d2">
+        <div class="prob-item">
+          <span class="prob-num">01</span>
+          <div>
+            <div class="prob-title">Manual entry is slow and error-prone</div>
+            <div class="prob-desc">Recording every transaction by hand is tedious. One missed entry distorts your entire financial picture for the month.</div>
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-num">02</span>
+          <div>
+            <div class="prob-title">No automatic categorisation</div>
+            <div class="prob-desc">Every record must be sorted manually. Patterns stay hidden inside rows of unlabelled numbers.</div>
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-num">03</span>
+          <div>
+            <div class="prob-title">No intelligent insights or guidance</div>
+            <div class="prob-desc">Spreadsheets show you what happened. They never warn you what is about to happen or tell you what to do about it.</div>
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-num">04</span>
+          <div>
+            <div class="prob-title">Overspending goes unnoticed</div>
+            <div class="prob-desc">Without real-time alerts, budget breaches are discovered only after the fact — too late to correct course.</div>
+          </div>
+        </div>
+        <div class="prob-item">
+          <span class="prob-num">05</span>
+          <div>
+            <div class="prob-title">Zero prediction capability</div>
+            <div class="prob-desc">Traditional tools cannot forecast whether next month's spending will rise or fall, leaving you flying blind.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION / FEATURES -->
+<section class="solution" id="features">
+  <div class="container">
+
+    <div class="sol-header rv">
+      <div class="sol-heading-block">
+        <div class="sol-eyebrow">The Solution</div>
+        <h2 class="sol-heading serif">
+          Every feature built for<br><em>financial clarity</em>
+        </h2>
+      </div>
+      <div class="sol-sub-block">
+        <p class="sol-sub">
+          SmartExpenseAI combines intelligent data capture, visual analytics, a conversational AI assistant, and machine learning predictions into a single platform that works with you — not just for you.
+        </p>
+      </div>
+    </div>
+
+    <div class="features-grid rv d1">
+
+      <!-- Wide card -->
+      <div class="feat feat-wide">
+        <div>
+          <div class="feat-num">01</div>
+          <div class="feat-icon-wrap">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="feat-name">AI Expense Analysis</div>
+          <p class="feat-desc">Every transaction is categorised automatically. Anomalies are flagged, spending patterns surface at a glance, and you can ask any financial question in plain language — the AI understands context, not just commands.</p>
+        </div>
+        <div>
+          <div class="fw-chart">
+            <div class="fw-b" style="height:40%;background:rgba(22,20,15,.08)"></div>
+            <div class="fw-b" style="height:62%;background:rgba(22,20,15,.13)"></div>
+            <div class="fw-b" style="height:48%;background:rgba(22,20,15,.08)"></div>
+            <div class="fw-b" style="height:80%;background:rgba(22,20,15,.16)"></div>
+            <div class="fw-b" style="height:55%;background:rgba(22,20,15,.10)"></div>
+            <div class="fw-b" style="height:70%;background:var(--gold)"></div>
+            <div class="fw-b" style="height:44%;background:rgba(22,20,15,.06);border:1px dashed var(--gold)"></div>
+          </div>
+          <div class="fw-ai-block">
+            <div class="fw-ai-text">Food spending is <strong>23% above</strong> your 6-month average. Trending toward ₹16,000 in June without intervention.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feat rv d1">
+        <div class="feat-num">02</div>
+        <div class="feat-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+        </div>
+        <div class="feat-name">Real-time Dashboard</div>
+        <p class="feat-desc">Income, expenses, savings rate, and category breakdowns update instantly. Visual, clear, and built for decisions — not just records.</p>
+      </div>
+
+      <div class="feat rv d2">
+        <div class="feat-num">03</div>
+        <div class="feat-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9m-4 8V7m-4 10v-3"/></svg>
+        </div>
+        <div class="feat-name">ML Spending Predictions</div>
+        <p class="feat-desc">A linear regression model trained on your transaction history forecasts tomorrow, next week, next month, and next year — so you know what is coming before it arrives.</p>
+      </div>
+
+      <div class="feat rv d1">
+        <div class="feat-num">04</div>
+        <div class="feat-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="feat-name">Smart Budget Tracker</div>
+        <p class="feat-desc">Set per-category budgets. Visual progress bars show usage in real time. Alerts fire before you overspend — not after.</p>
+      </div>
+
+      <div class="feat rv d2">
+        <div class="feat-num">05</div>
+        <div class="feat-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="feat-name">Savings Goal Coaching</div>
+        <p class="feat-desc">Define savings targets and let the AI track your progress weekly, flag risks early, and recommend specific actions to keep you on course.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ANALYTICS -->
+<section class="analytics" id="analytics">
+  <div class="container">
+    <div class="analytics-grid">
+
+      <div class="metrics-stack rv">
+        <div class="metric-card mc-green">
+          <div class="metric-top">
+            <div class="metric-left">
+              <span class="metric-name">Savings this month</span>
+            </div>
+            <div class="metric-right">
+              <span class="metric-val serif" style="color:var(--green)">₹17,190</span>
+              <span class="tag tag-up">+6.2%</span>
+            </div>
+          </div>
+          <div class="track"><div class="fill" style="width:82%;background:var(--green)"></div></div>
+        </div>
+
+        <div class="metric-card mc-red">
+          <div class="metric-top">
+            <div class="metric-left">
+              <span class="metric-name">Shopping — budget used</span>
+            </div>
+            <div class="metric-right">
+              <span class="metric-val serif" style="color:var(--red)">₹11,200</span>
+              <span class="tag tag-dn">93%</span>
+            </div>
+          </div>
+          <div class="track"><div class="fill" style="width:93%;background:var(--red)"></div></div>
+        </div>
+
+        <div class="metric-card mc-gold">
+          <div class="metric-top">
+            <div class="metric-left">
+              <span class="metric-name">Food &amp; Dining</span>
+            </div>
+            <div class="metric-right">
+              <span class="metric-val serif" style="color:var(--gold-dk)">₹14,570</span>
+              <span class="tag tag-wn">73%</span>
+            </div>
+          </div>
+          <div class="track"><div class="fill" style="width:73%;background:var(--gold)"></div></div>
+        </div>
+
+        <div class="metric-card mc-steel">
+          <div class="metric-top">
+            <div class="metric-left">
+              <span class="metric-name">AI Prediction — Next Month</span>
+            </div>
+            <div class="metric-right">
+              <span class="metric-val serif" style="color:var(--steel)">₹46,400</span>
+              <span class="tag tag-ai">AI</span>
+            </div>
+          </div>
+          <div class="track"><div class="fill" style="width:68%;background:var(--steel)"></div></div>
+        </div>
+      </div>
+
+      <div class="analytics-text rv d2">
+        <div class="at-eyebrow">Analytics Preview</div>
+        <h2 class="at-heading serif">See exactly<br>where your<br><em>money goes</em></h2>
+        <p class="at-sub">Colour-coded metrics make it instantly clear what is on track, what is dangerously close to the limit, and what AI predicts for next month.</p>
+
+        <div class="insight-cards">
+          <div class="insight-card">
+            <div class="ic-bar" style="background:var(--green)"></div>
+            <div>
+              <div class="ic-title">Savings on track</div>
+              <div class="ic-sub">₹17,190 saved — 6% ahead of your ₹16,200 monthly goal.</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="ic-bar" style="background:var(--red)"></div>
+            <div>
+              <div class="ic-title">Shopping budget alert</div>
+              <div class="ic-sub">93% used with 3 days remaining. Consider pausing non-essentials.</div>
+            </div>
+          </div>
+          <div class="insight-card">
+            <div class="ic-bar" style="background:var(--steel)"></div>
+            <div>
+              <div class="ic-title">June AI forecast ready</div>
+              <div class="ic-sub">Based on 6-month patterns, AI predicts ₹46,400 spend next month.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CHATBOT -->
+<section class="chatbot-section" id="chatbot">
+  <div class="container">
+    <div class="chat-grid">
+
+      <div class="chat-window rv">
+        <div class="chat-topbar">
+          <div class="chat-identity">
+            <div class="chat-av"><div class="chat-av-dot"></div></div>
+            <div>
+              <div class="ci-name">SmartExpenseAI Assistant</div>
+              <div class="ci-status"><span class="s-dot"></span>Online &middot; Always available</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-messages">
+          <div class="msg ai">
+            <div class="bubble">
+              Hi Rahul. Your weekly snapshot:<br><br>
+              You spent <span class="pos">18% less</span> this month versus April. Transport discipline saved ₹2,100.
+            </div>
+            <div class="ts">09:14 AM</div>
+          </div>
+
+          <div class="msg user">
+            <div class="bubble">How is my food budget looking?</div>
+            <div class="ts">09:15 AM</div>
+          </div>
+
+          <div class="msg ai">
+            <div class="bubble">
+              Food budget exceeded by <span class="neg">₹1,200</span> this month.<br><br>
+              Top driver: weekend dining (₹4,800). Cooking at home 2 extra days could save <span class="hi">₹9,600 per year</span>.
+            </div>
+            <div class="ts">09:15 AM</div>
+          </div>
+
+          <div class="msg user">
+            <div class="bubble">What is my June prediction?</div>
+            <div class="ts">09:16 AM</div>
+          </div>
+
+          <div class="msg ai">
+            <div class="bubble">
+              Based on 6 months of patterns, I predict <span class="hi">₹46,400</span> for June — a <span class="pos">3% improvement</span> if you follow the shopping budget recommendation.
+            </div>
+            <div class="ts">09:16 AM</div>
+          </div>
+        </div>
+
+        <div class="chat-inputbar">
+          <div class="ci-field">Ask about your finances&hellip;</div>
+          <button class="ci-send-btn">&#10148;</button>
+        </div>
+      </div>
+
+      <div class="chat-text rv d2">
+        <div class="ct-eyebrow">AI Chatbot</div>
+        <h2 class="ct-heading serif">
+          Your personal<br>finance advisor,<br><em>always on</em>
+        </h2>
+        <p class="ct-sub">
+          Ask anything about your spending in plain language. Get instant, data-backed answers drawn from your actual transactions — not generic, one-size-fits-all advice.
+        </p>
+
+        <div class="chat-feat-list">
+          <div class="cf">
+            <div class="cf-mark">SA</div>
+            <div>
+              <div class="cf-title">Spending analysis on demand</div>
+              <div class="cf-sub">Ask "Why did I spend more this month?" and receive a full, categorised breakdown instantly.</div>
+            </div>
+          </div>
+          <div class="cf">
+            <div class="cf-mark">GC</div>
+            <div>
+              <div class="cf-title">Savings goal coaching</div>
+              <div class="cf-sub">Set targets and receive weekly nudges, early warnings, and recommended actions to stay on track.</div>
+            </div>
+          </div>
+          <div class="cf">
+            <div class="cf-mark">PW</div>
+            <div>
+              <div class="cf-title">Predictive warnings</div>
+              <div class="cf-sub">AI alerts you before you overspend — so you can correct course while there is still time.</div>
+            </div>
+          </div>
+          <div class="cf">
+            <div class="cf-mark">NL</div>
+            <div>
+              <div class="cf-title">Natural language queries</div>
+              <div class="cf-sub">No dashboards or menus needed. Just ask, the way you would talk to a trusted advisor.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-inner rv">
+      <div class="cta-tag">Begin Today</div>
+      <h2 class="cta-heading serif">
+        Start your journey to<br><em>financial clarity</em>
+      </h2>
+      <p class="cta-sub">
+        Join and take control — track smarter, save more,<br>and stop discovering overspending after the damage is done.
+      </p>
+      <div class="cta-btns">
+        <a href="/register" class="btn-gold">Get Started</a>
+        <a href="/login" class="btn-ghost-dk">Log in</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand serif">Smart<span>Expense</span>AI</div>
+  <div class="footer-note">AI Expense Tracker with Financial Assistant Chatbot and ML Prediction System</div>
+</footer>
+
+<script>
+(function(){
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  var els = document.querySelectorAll('.rv');
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.1});
+  for(var i=0;i<els.length;i++) io.observe(els[i]);
+})();
+</script>
+</body>
+</html>

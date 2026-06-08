@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpenseAI | My Budgets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --gold: #c9a96e;
+            --gold-dk: #9d7c47;
+            --gold-bg: #f5eedf;
+            --t1: #1a1816;
+            --t2: #2d2b28;
+            --t3: #6b6560;
+            --t4: #a8a29c;
+            --border: #e8e6e0;
+            --border-s: #f0ede6;
+            --bg: #ffffff;
+            --bg-off: #fafaf8;
+            --green: #3d7a5e;
+            --red: #b85450;
+            --orange: #e09d32;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-off);
+            color: var(--t1);
+            line-height: 1.5;
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255,255,255,.95);
+            border-bottom: 1px solid var(--border-s);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--t1);
+            text-decoration: none;
+        }
+        .nav-brand span {
+            color: var(--gold);
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            font-size: 14px;
+            color: var(--t3);
+        }
+        .nav-links a:hover {
+            color: var(--gold-dk);
+        }
+        .btn-sm {
+            background: var(--gold);
+            padding: 6px 16px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--t1);
+        }
+        .btn-sm:hover {
+            background: var(--gold-dk);
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--t1);
+        }
+        .header p {
+            color: var(--t3);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+        .btn-add {
+            background: var(--gold);
+            padding: 10px 24px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--t1);
+            display: inline-block;
+        }
+        .btn-add:hover {
+            background: var(--gold-dk);
+            color: white;
+        }
+
+        /* Table */
+        .table-wrapper {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 700px;
+        }
+        th {
+            text-align: left;
+            padding: 14px 16px;
+            background: var(--bg-off);
+            font-weight: 600;
+            color: var(--t2);
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-s);
+            color: var(--t2);
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        tr:hover td {
+            background: var(--bg-off);
+        }
+
+        /* Badge */
+        .badge {
+            background: var(--gold-bg);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gold-dk);
+            display: inline-block;
+        }
+
+        /* Progress bar */
+        .progress-cell {
+            min-width: 130px;
+        }
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+        .fill-safe { background: var(--green); }
+        .fill-warning { background: var(--orange); }
+        .fill-danger { background: var(--red); }
+        .percent {
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 45px;
+            text-align: right;
+        }
+        .text-safe { color: var(--green); }
+        .text-warning { color: var(--orange); }
+        .text-danger { color: var(--red); }
+
+        /* Amounts */
+        .amount {
+            font-weight: 500;
+        }
+        .remaining {
+            font-weight: 600;
+            color: var(--green);
+        }
+        .remaining.negative {
+            color: var(--red);
+        }
+
+        /* Action links */
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+        .action {
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        .edit {
+            background: var(--gold-bg);
+            color: var(--gold-dk);
+        }
+        .edit:hover {
+            background: var(--gold);
+            color: var(--t1);
+        }
+        .delete {
+            background: #faeeed;
+            color: var(--red);
+        }
+        .delete:hover {
+            background: var(--red);
+            color: white;
+        }
+
+        /* Empty state */
+        .empty {
+            text-align: center;
+            padding: 60px 24px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        .empty h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--t2);
+            margin-bottom: 8px;
+        }
+        .empty p {
+            color: var(--t3);
+            margin-bottom: 24px;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 8px 24px;
+            border-radius: 40px;
+            text-decoration: none;
+            color: var(--gold-dk);
+            font-weight: 500;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .btn-outline:hover {
+            background: var(--gold-bg);
+        }
+
+        /* Back link */
+        .back-link {
+            display: inline-block;
+            color: var(--t3);
+            text-decoration: none;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        .back-link:hover {
+            color: var(--gold-dk);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            border-top: 1px solid var(--border-s);
+            color: var(--t4);
+            font-size: 12px;
+            background: var(--bg);
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('dashboard') }}" class="brand">Smart<span>Expense</span>AI</a>
+        <div class="nav-right">
+            <a href="{{ url_for('analytics') }}" class="analytics-btn">Analytics</a>
+            <div class="avatar">
+                <a href="{{ url_for('profile') }}">{{ username[:2].upper() if username else 'PR' }}</a>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+</div>
+
+<main class="container">
+    <div class="header">
+        <div>
+            <h1>My Budgets</h1>
+            <p>Track your spending limits</p>
+        </div>
+        <a href="{{ url_for('add_budget') }}" class="btn-add">+ Add Budget</a>
+    </div>
+
+    {% if budget_report and budget_report|length > 0 %}
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Budget</th>
+                    <th>Spent</th>
+                    <th>Remaining</th>
+                    <th>Usage</th>
+                    <th>Period</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for budget in budget_report %}
+                <tr>
+                    <td><span class="badge">{{ budget.category }}</span></td>
+                    <td class="amount">₹{{ "%.2f"|format(budget.budget) if budget.budget is number else budget.budget }}</td>
+                    <td class="amount">₹{{ "%.2f"|format(budget.spent) if budget.spent is number else budget.spent }}</td>
+                    <td>
+                        {% set remaining_num = budget.remaining|float if budget.remaining is not none else 0 %}
+                        {% if remaining_num >= 0 %}
+                        <span class="remaining">₹{{ "%.2f"|format(remaining_num) }}</span>
+                        {% else %}
+                        <span class="remaining negative">-₹{{ "%.2f"|format(remaining_num|abs) }}</span>
+                        {% endif %}
+                    </td>
+                    <td class="progress-cell">
+                        {% set pct = budget.pct_used|float if budget.pct_used is not none else 0 %}
+                        <div class="progress-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill 
+                                    {% if pct <= 70 %}fill-safe
+                                    {% elif pct <= 90 %}fill-warning
+                                    {% else %}fill-danger{% endif %}"
+                                    style="width: {{ pct if pct <= 100 else 100 }}%;">
+                                </div>
+                            </div>
+                            <span class="percent 
+                                {% if pct <= 70 %}text-safe
+                                {% elif pct <= 90 %}text-warning
+                                {% else %}text-danger{% endif %}">
+                                {{ "%.0f"|format(pct) }}%
+                            </span>
+                        </div>
+                    </td>
+                    <td style="color: var(--t3);">{{ budget.period }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('edit_budget', id=budget.id) }}" class="action edit">Edit</a>
+                        <a href="{{ url_for('delete_budget', id=budget.id) }}" class="action delete" onclick="return confirm('Delete this budget?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+
+    <div class="empty">
+        <h3>No budgets yet</h3>
+        <p>Create your first budget to start tracking expenses</p>
+        <a href="{{ url_for('add_budget') }}" class="btn-outline">+ Create Budget</a>
+    </div>
+
+    {% endif %}
+</main>
+
+</body>
+</html>

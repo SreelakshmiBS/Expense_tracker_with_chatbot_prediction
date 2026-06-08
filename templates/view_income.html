@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpenseAI | View Income</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --bg-off: #fafaf8;
+            --bg-light: #f4f3ef;
+            --border-s: #f0ede6;
+            --border: #e8e6e0;
+
+            --t1: #1a1816;
+            --t2: #2d2b28;
+            --t3: #6b6560;
+            --t4: #a8a29c;
+
+            --gold: #c9a96e;
+            --gold-dk: #9d7c47;
+            --gold-lt: #e0c27a;
+            --gold-bg: #f5eedf;
+
+            --green: #3d7a5e;
+            --green-bg: #e8f3ed;
+            --red: #b85450;
+            --red-bg: #faeeed;
+            --blue: #4a6fa5;
+            --blue-bg: #edf1f8;
+
+            --shadow-sm: 0 2px 8px rgba(26,24,22,0.04);
+            --shadow-md: 0 8px 24px rgba(26,24,22,0.06);
+            --shadow-lg: 0 20px 40px rgba(26,24,22,0.08);
+            --shadow-gold: 0 8px 20px rgba(201, 169, 110, 0.18);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-off) 100%);
+            color: var(--t1);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Glass Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255,255,255,0.85);
+            border-bottom: 1px solid rgba(201, 169, 110, 0.25);
+            padding: 0.75rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--t1) 30%, var(--gold) 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand span {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dk));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--t1);
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+        }
+        .avatar a {
+            text-decoration: none;
+            color: var(--t1);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gold-dk);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: var(--gold);
+            color: var(--t1);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: var(--t1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .page-header h1::before {
+            content: '';
+            width: 6px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--green), #5a9b7a);
+            border-radius: 4px;
+        }
+        .page-sub {
+            color: var(--t3);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .summary-card {
+            background: var(--bg);
+            border: 1px solid var(--border-s);
+            border-radius: var(--radius-lg);
+            padding: 1.2rem;
+            box-shadow: var(--shadow-sm);
+            border-top: 3px solid var(--green);
+        }
+        .summary-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--t4);
+            margin-bottom: 0.3rem;
+        }
+        .summary-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg);
+            border: 1px solid var(--border-s);
+            border-radius: var(--radius-lg);
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+        }
+        .income-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+        .income-table th {
+            text-align: left;
+            padding: 1rem 1rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--gold-dk);
+            background: var(--bg-off);
+            border-bottom: 2px solid var(--border-s);
+        }
+        .income-table td {
+            padding: 1rem 1rem;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--t2);
+            background: var(--bg);
+        }
+        .income-table tr:hover td {
+            background: var(--bg-off);
+        }
+
+        .badge-income {
+            background: var(--green-bg);
+            color: var(--green);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .btn-edit, .btn-delete {
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-edit {
+            background: var(--gold-bg);
+            color: var(--gold-dk);
+            border: 1px solid var(--border-s);
+        }
+        .btn-edit:hover {
+            background: var(--gold);
+            color: var(--t1);
+        }
+        .btn-delete {
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid var(--border-s);
+        }
+        .btn-delete:hover {
+            background: var(--red);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--t3);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--t3);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-off);
+            border-radius: 40px;
+            border: 1px solid var(--border-s);
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            color: var(--gold-dk);
+            background: var(--gold-bg);
+            border-color: var(--gold);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: var(--t4);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border-s);
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 0.75rem 1rem; }
+            .page-header h1 { font-size: 1.5rem; }
+            .summary-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('dashboard') }}" class="brand">Smart<span>Expense</span>AI</a>
+        <div class="nav-right">
+            <a href="{{ url_for('analytics') }}" class="analytics-btn">Analytics</a>
+            <div class="avatar">
+                <a href="{{ url_for('profile') }}">{{ username[:2].upper() if username else 'PR' }}</a>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    <div class="page-header">
+        <h1>Income Transactions</h1>
+        <div class="page-sub">Track all your earnings and income sources</div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <div class="summary-label">Total Income</div>
+            <div class="summary-value">₹ {{ total_income }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Number of Transactions</div>
+            <div class="summary-value">{{ transactions|length }}</div>
+        </div>
+    </div>
+
+    <!-- Income Table -->
+    <div class="table-container">
+        {% if transactions %}
+        <table class="income-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Period</th>
+                    <th>Created At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in transactions %}
+                <tr>
+                    <td>{{ t[0] }}</td>
+                    <td>{{ t[3] }}</td>
+                    <td>₹ {{ t[4] }}</td>
+                    <td>{{ t[6] }}</td>
+                    <td>{{ t[5] if t[5] else '-' }}</td>
+                    <td>{{ t[8] }}</td>
+                    <td>{{ t[7] }}</td>
+                    <td class="action-icons">
+                        <a href="{{ url_for('edit_income_and_expense', id=t[0]) }}" class="btn-edit">Edit</a>
+                        <a href="{{ url_for('delete_transaction', id=t[0]) }}" class="btn-delete" onclick="return confirm('Delete this income?')">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+            <p>No income transactions found.</p>
+            <p style="margin-top: 0.5rem;"><a href="{{ url_for('add_income') }}" style="color: var(--gold);">Add your first income</a></p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="footer">
+        SmartExpenseAI — Intelligent Income Tracking
+    </div>
+</div>
+
+</body>
+</html>

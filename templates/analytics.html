@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartExpenseAI | Advanced Analytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --bg: #ffffff;
+        --bg-off: #fafaf8;
+        --bg-light-panel: #f4f3ef;
+        --border-soft: #f0ede6;
+        --border-highlight: #e8e6e0;
+        --text-primary: #1a1816;
+        --text-dark: #2d2b28;
+        --text-secondary: #6b6560;
+        --text-muted: #a8a29c;
+        --gold: #c9a96e;
+        --gold-dark: #9d7c47;
+        --gold-light: #e0c27a;
+        --gold-bg: #f5eedf;
+        --gold-glow: rgba(201, 169, 110, 0.25);
+        --success: #3d7a5e;
+        --success-light: #5a9b7a;
+        --success-bg: #e8f3ed;
+        --warning: #b85450;
+        --warning-light: #d46b66;
+        --warning-bg: #faeeed;
+        --ai-blue: #4a6fa5;
+        --ai-blue-light: #6b8db8;
+        --ai-bg: #edf1f8;
+        --purple: #8b5cf6;
+        --orange: #f97316;
+        --teal: #14b8a6;
+        --shadow-sm: 0 2px 8px rgba(26,24,22,0.04);
+        --shadow-md: 0 8px 24px rgba(26,24,22,0.06);
+        --shadow-lg: 0 20px 40px rgba(26,24,22,0.08);
+        --shadow-gold: 0 8px 20px rgba(201, 169, 110, 0.18);
+        --radius-sm: 10px;
+        --radius-md: 16px;
+        --radius-lg: 24px;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, var(--bg) 0%, var(--bg-off) 100%);
+        color: var(--text-primary);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        padding: 2rem;
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+        position: sticky; top: 0; z-index: 100;
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        background: rgba(255,255,255,0.85);
+        border-bottom: 1px solid rgba(201,169,110,0.25);
+        margin-bottom: 2rem; padding: 0.75rem 2rem;
+        border-radius: 60px;
+        width: calc(100% + 4rem); margin-left: -2rem; margin-top: -2rem;
+        box-shadow: var(--shadow-sm);
+    }
+    .nav-container { max-width: 1600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .brand { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 600; text-decoration: none; background: linear-gradient(135deg, var(--text-primary) 30%, var(--gold) 70%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .brand span { background: linear-gradient(135deg, var(--gold), var(--gold-dark)); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .analytics-btn { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; padding: 0.4rem 1rem; border-radius: 30px; transition: all 0.2s; }
+    .analytics-btn:hover { background: var(--gold-bg); color: var(--gold-dark); }
+    .avatar { width: 38px; height: 38px; background: linear-gradient(135deg, var(--gold), var(--gold-dark)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.9rem; color: var(--text-primary); border: 2px solid white; box-shadow: var(--shadow-sm); text-decoration: none; }
+    .avatar a { text-decoration: none; color: inherit; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .avatar:hover { transform: scale(1.05); box-shadow: var(--shadow-gold); }
+    .logout-btn { background: transparent; border: 1px solid var(--gold); padding: 6px 16px; border-radius: 30px; font-size: 0.8rem; font-weight: 500; color: var(--gold-dark); text-decoration: none; transition: all 0.2s; }
+    .logout-btn:hover { background: var(--gold); color: var(--text-primary); box-shadow: var(--shadow-gold); }
+
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: all 0.2s; margin-bottom: 1.5rem; padding: 0.5rem 1rem; background: var(--bg-off); border-radius: 40px; border: 1px solid var(--border-soft); }
+    .back-link:hover { color: var(--gold-dark); background: var(--gold-bg); border-color: var(--gold); transform: translateX(-2px); }
+
+    /* ── Page Header ── */
+    .page-header { margin-bottom: 2rem; }
+    .page-header h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.3px; color: var(--text-primary); display: flex; align-items: center; gap: 0.75rem; }
+    .page-header h1::before { content: ''; width: 6px; height: 32px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border-radius: 4px; }
+    .page-sub { color: var(--text-secondary); margin-top: 0.5rem; font-size: 0.9rem; }
+
+    /* ── AI Intelligence Row ── */
+    .ai-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Health Score */
+    .health-card {
+        background: var(--bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        position: relative; overflow: hidden;
+    }
+    .health-card::after {
+        content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    }
+    .health-card.excellent::after { background: linear-gradient(90deg, #3d7a5e, #5a9b7a); }
+    .health-card.good::after       { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+    .health-card.moderate::after   { background: linear-gradient(90deg, var(--orange), #fb923c); }
+    .health-card.risky::after      { background: linear-gradient(90deg, var(--warning), #d46b66); }
+
+    .health-label { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .health-score-ring {
+        width: 90px; height: 90px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; font-weight: 700; margin: 0.5rem 0;
+        position: relative;
+    }
+    .health-score-ring.excellent { background: var(--success-bg); color: var(--success); }
+    .health-score-ring.good      { background: var(--gold-bg); color: var(--gold-dark); }
+    .health-score-ring.moderate  { background: #fff3e8; color: var(--orange); }
+    .health-score-ring.risky     { background: var(--warning-bg); color: var(--warning); }
+    .health-status { font-size: 1rem; font-weight: 600; color: var(--text-dark); }
+
+    /* AI Insights */
+    .ai-insights-card {
+        background: var(--bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        grid-column: span 2;
+        overflow: hidden;
+    }
+    .ai-insights-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold-bg); display: inline-block; }
+
+    .insights-list { display: flex; flex-direction: column; gap: 0.6rem; max-height: 220px; overflow-y: auto; padding-right: 4px; }
+    .insights-list::-webkit-scrollbar { width: 4px; }
+    .insights-list::-webkit-scrollbar-track { background: var(--bg-off); border-radius: 4px; }
+    .insights-list::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+
+    .insight-item {
+        display: flex; align-items: flex-start; gap: 0.6rem;
+        padding: 0.6rem 0.85rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem; line-height: 1.4;
+    }
+    .insight-item.positive { background: var(--success-bg); color: var(--success); }
+    .insight-item.warning  { background: #fff9ec; color: #8a6000; border: 1px solid #f5e09a; }
+    .insight-item.danger   { background: var(--warning-bg); color: var(--warning); }
+    .insight-item.info     { background: var(--ai-bg); color: var(--ai-blue); }
+    .insight-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* Forecast Row */
+    .forecast-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .forecast-card {
+        background: var(--bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem 1.5rem;
+        box-shadow: var(--shadow-sm);
+        display: flex; align-items: center; gap: 1.25rem;
+    }
+    .forecast-icon {
+        width: 52px; height: 52px; flex-shrink: 0;
+        background: linear-gradient(135deg, var(--gold-bg), #ffe9b8);
+        border-radius: var(--radius-sm);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem;
+    }
+    .forecast-info { flex: 1; }
+    .forecast-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .forecast-amount { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); }
+    .forecast-amount.not-ready { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; }
+    .forecast-badge { font-size: 0.7rem; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin-top: 0.25rem; display: inline-block; }
+    .forecast-badge.ai  { background: var(--ai-bg); color: var(--ai-blue); }
+    .forecast-badge.est { background: var(--gold-bg); color: var(--gold-dark); }
+
+    /* Budget Alerts */
+    .budget-alerts-card {
+        background: var(--bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.5rem;
+    }
+    .budget-alerts-card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold-bg); display: inline-block; }
+    .alerts-grid { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .alert-pill {
+        display: flex; align-items: center; gap: 0.5rem;
+        padding: 0.5rem 1rem; border-radius: 30px;
+        font-size: 0.8rem; font-weight: 500;
+    }
+    .alert-pill .pct { font-weight: 700; }
+    .alert-pill.safe    { background: var(--success-bg); color: var(--success); }
+    .alert-pill.warning { background: #fff9ec; color: #8a6000; border: 1px solid #f5e09a; }
+    .alert-pill.danger  { background: var(--warning-bg); color: var(--warning); }
+    .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .safe    .alert-dot { background: var(--success); }
+    .warning .alert-dot { background: #d4a700; }
+    .danger  .alert-dot { background: var(--warning); }
+
+    /* ── Charts Grid ── */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    .card {
+        background: var(--bg);
+        border: 1px solid var(--border-soft);
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+        position: relative; overflow: hidden;
+    }
+    .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); opacity: 0; transition: opacity 0.3s; }
+    .card:hover::before { opacity: 1; }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: rgba(201,169,110,0.4); }
+    .card h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-dark); margin-bottom: 1.25rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold-bg); display: inline-block; letter-spacing: -0.2px; }
+    canvas { max-height: 300px; width: 100%; }
+
+    .flash-message { margin-bottom: 1.5rem; padding: 0.8rem 1rem; border-radius: var(--radius-sm); background: var(--gold-bg); border-left: 4px solid var(--gold); color: var(--gold-dark); font-size: 0.85rem; }
+
+    @media (max-width: 900px) {
+        body { padding: 1rem; }
+        .navbar { width: calc(100% + 2rem); margin-left: -1rem; padding: 0.5rem 1rem; }
+        .ai-row { grid-template-columns: 1fr; }
+        .ai-insights-card { grid-column: span 1; }
+        .forecast-row { grid-template-columns: 1fr; }
+        .grid { grid-template-columns: 1fr; gap: 1rem; }
+        .analytics-btn { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('dashboard') }}" class="brand">Smart<span>Expense</span>AI</a>
+        <div class="nav-right">
+            <a href="{{ url_for('analytics') }}" class="analytics-btn">Analytics</a>
+            <div class="avatar">
+                <a href="{{ url_for('profile') }}">{{ username[:2].upper() if username else 'PR' }}</a>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="page-header">
+    <h1>Advanced Analytics</h1>
+    <div class="page-sub">Deep dive into your financial patterns across daily, monthly, and yearly trends</div>
+</div>
+
+<!-- ── AI Intelligence Row ── -->
+<div class="ai-row">
+
+    <!-- Health Score -->
+    <div class="health-card {{ health.color }}">
+        <div class="health-label">Financial Health</div>
+        <div class="health-score-ring {{ health.color }}">{{ health.score }}</div>
+        <div class="health-status">{{ health.status }}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.4rem;">out of 100</div>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="ai-insights-card">
+        <h3>🤖 AI Insights</h3>
+        <div class="insights-list">
+            {% for insight in ai_insights %}
+            <div class="insight-item {{ insight.type }}">
+                <span class="insight-icon">{{ insight.icon }}</span>
+                <span>{{ insight.text }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- ── Budget Alerts ── -->
+{% if budget_alerts %}
+<div class="budget-alerts-card">
+    <h3>💰 Budget Status</h3>
+    <div class="alerts-grid">
+        {% for b in budget_alerts %}
+        <div class="alert-pill {{ b.alert_level }}">
+            <span class="alert-dot"></span>
+            <span>{{ b.category | title }}</span>
+            <span class="pct">{{ b.pct_used }}%</span>
+            <span style="opacity:0.6;font-weight:400">
+                {% if b.alert_level == 'danger' %}over budget{% elif b.alert_level == 'warning' %}nearing limit{% else %}on track{% endif %}
+            </span>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- ── Charts Grid (unchanged) ── -->
+<div class="grid">
+
+    <div class="card">
+        <h3>Daily Income vs Expense</h3>
+        <canvas id="dailyChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Monthly Trend</h3>
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Yearly Trend</h3>
+        <canvas id="yearlyChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Expense Categories</h3>
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Budget vs Actual</h3>
+        <canvas id="budgetChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h3>Goals Progress</h3>
+        <canvas id="goalChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+// ── Shared palette ──
+const C = {
+    income:  "#3d7a5e", incomeA: "rgba(61,122,94,0.08)",
+    expense: "#b85450", expenseA:"rgba(184,84,80,0.08)",
+    gold:    "#c9a96e", goldA:   "rgba(201,169,110,0.1)",
+    blue:    "#4a6fa5", purple:  "#8b5cf6",
+    orange:  "#f97316", teal:    "#14b8a6", grey: "#6b6560"
+};
+const PIE_COLORS = [C.gold, C.income, C.blue, C.expense, C.purple, C.orange, C.teal, C.grey];
+
+// ── Helper: build a line dataset ──
+function lineDS(label, data, color) {
+    return { label, data, borderColor: color, backgroundColor: color.replace(')', ',0.08)').replace('rgb', 'rgba'),
+        fill: true, tension: 0.3, borderWidth: 2.5,
+        pointBackgroundColor: color, pointBorderColor: "#fff",
+        pointRadius: 4, pointHoverRadius: 7, pointBorderWidth: 2 };
+}
+
+// ── Helper: shared line options ──
+const lineOpts = {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 } } } }
+};
+
+// ── Daily ──
+new Chart("dailyChart", { type: 'line', data: {
+    labels: {{ days|tojson }},
+    datasets: [ lineDS("Income",  {{ daily_income|tojson }},  C.income),
+                lineDS("Expense", {{ daily_expense|tojson }}, C.expense) ]
+}, options: lineOpts });
+
+// ── Monthly ──
+new Chart("monthlyChart", { type: 'line', data: {
+    labels: {{ months|tojson }},
+    datasets: [ lineDS("Income",  {{ monthly_income|tojson }},  C.income),
+                lineDS("Expense", {{ monthly_expense|tojson }}, C.expense) ]
+}, options: lineOpts });
+
+// ── Yearly ──
+new Chart("yearlyChart", { type: 'line', data: {
+    labels: {{ years|tojson }},
+    datasets: [ lineDS("Income",  {{ yearly_income|tojson }},  C.income),
+                lineDS("Expense", {{ yearly_expense|tojson }}, C.expense) ]
+}, options: lineOpts });
+
+// ── Pie ──
+const catValues = {{ category_values|tojson }};
+const catTotal  = catValues.reduce((a, b) => a + b, 0);
+new Chart("pieChart", { type: 'pie', data: {
+    labels: {{ categories|tojson }},
+    datasets: [{ data: catValues, backgroundColor: PIE_COLORS, borderWidth: 0, hoverOffset: 12 }]
+}, options: { responsive: true, maintainAspectRatio: true,
+    plugins: {
+        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 12 } },
+        tooltip: { callbacks: { label: ctx => `${ctx.label}: ₹${ctx.raw} (${((ctx.raw/catTotal)*100).toFixed(1)}%)` } }
+    }
+}});
+
+// ── Budget vs Actual ──
+const barOpts = { borderRadius: 8, barPercentage: 0.6, categoryPercentage: 0.8 };
+new Chart("budgetChart", { type: 'bar', data: {
+    labels: {{ budget_categories|tojson }},
+    datasets: [
+        { label: "Budget",       data: {{ budget_values|tojson }},  backgroundColor: C.gold,    ...barOpts },
+        { label: "Actual Spent", data: {{ actual_values|tojson }},  backgroundColor: C.expense, ...barOpts }
+    ]
+}, options: { responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 } } } }
+}});
+
+// ── Goals ──
+new Chart("goalChart", { type: 'bar', data: {
+    labels: {{ goal_names|tojson }},
+    datasets: [{ label: "Progress (%)", data: {{ goal_progress|tojson }},
+        backgroundColor: ctx => { const v = ctx.raw; return v>=80?C.income:v>=50?C.gold:v>=25?C.orange:C.expense; },
+        borderRadius: 8, barPercentage: 0.6
+    }]
+}, options: { responsive: true, maintainAspectRatio: true,
+    scales: { y: { beginAtZero: true, max: 100, grid: { color: "rgba(0,0,0,0.05)" },
+        title: { display: true, text: 'Completion %', color: '#6b6560', font: { size: 11 } } } },
+    plugins: {
+        legend: { position: 'top', labels: { font: { size: 11 } } },
+        tooltip: { callbacks: { label: ctx => `${ctx.raw}% completed` } }
+    }
+}});
+</script>
+
+</body>
+</html>

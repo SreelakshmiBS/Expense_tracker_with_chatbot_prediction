@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartExpenseAI | Add Expense</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #ffffff;
+            --bg-off: #fafaf8;
+            --bg-light-panel: #f4f3ef;
+            --border-soft: #f0ede6;
+            --border-highlight: #e8e6e0;
+            --text-primary: #1a1816;
+            --text-dark: #2d2b28;
+            --text-secondary: #6b6560;
+            --text-muted: #a8a29c;
+            --gold: #c9a96e;
+            --gold-dark: #9d7c47;
+            --gold-light: #e0c27a;
+            --gold-bg: #f5eedf;
+            --gold-glow: rgba(201, 169, 110, 0.25);
+            --success: #3d7a5e;
+            --warning: #b85450;
+            --warning-bg: #faeeed;
+            --ai-blue: #4a6fa5;
+            --ai-bg: #edf1f8;
+            --shadow-sm: 0 2px 8px rgba(26,24,22,0.04);
+            --shadow-md: 0 8px 24px rgba(26,24,22,0.06);
+            --shadow-lg: 0 20px 40px rgba(26,24,22,0.08);
+            --shadow-gold: 0 8px 20px rgba(201, 169, 110, 0.18);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-off) 100%);
+            color: var(--text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Glass Navbar */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255,255,255,0.85);
+            border-bottom: 1px solid rgba(201, 169, 110, 0.25);
+            padding: 0.75rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--text-primary) 30%, var(--gold) 70%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .brand span {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .analytics-btn {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.4rem 1rem;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+        .analytics-btn:hover {
+            background: var(--gold-bg);
+            color: var(--gold-dark);
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            border: 2px solid white;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+        }
+        .avatar a {
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-gold);
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gold-dark);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .logout-btn:hover {
+            background: var(--gold);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-gold);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-off);
+            border-radius: 40px;
+            border: 1px solid var(--border-soft);
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            color: var(--gold-dark);
+            background: var(--gold-bg);
+            border-color: var(--gold);
+            transform: translateX(-2px);
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--bg);
+            border: 1px solid var(--border-soft);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .form-card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--bg-off) 0%, var(--bg) 100%);
+            padding: 1.5rem 2rem;
+            border-bottom: 3px solid var(--gold);
+            position: relative;
+        }
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+        }
+        .card-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .card-header h2::before {
+            content: '';
+            width: 6px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            border-radius: 4px;
+        }
+        .card-header p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--gold-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            background: var(--bg-off);
+            border: 1.5px solid var(--border-soft);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--gold);
+            background: var(--bg);
+            box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
+        }
+
+        input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* Select custom styling */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23c9a96e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        /* Two column layout */
+        .row-2cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 0.5rem;
+            font-family: inherit;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-gold);
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+        }
+
+        /* Info Note */
+        .info-note {
+            margin-top: 1.5rem;
+            padding: 0.8rem 1rem;
+            background: var(--ai-bg);
+            border-left: 3px solid var(--ai-blue);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            color: var(--ai-blue);
+        }
+
+        /* Flash message */
+        .flash-message {
+            margin-bottom: 1.5rem;
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-sm);
+            background: var(--gold-bg);
+            border-left: 4px solid var(--gold);
+            color: var(--gold-dark);
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar { padding: 0.75rem 1rem; }
+            .card-header { padding: 1.2rem 1.5rem; }
+            .card-header h2 { font-size: 1.3rem; }
+            .card-body { padding: 1.5rem; }
+            .container { margin: 1rem auto; }
+            .row-2cols { grid-template-columns: 1fr; gap: 1rem; }
+            .analytics-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{{ url_for('dashboard') }}" class="brand">Smart<span>Expense</span>AI</a>
+        <div class="nav-right">
+            <a href="{{ url_for('analytics') }}" class="analytics-btn">Analytics</a>
+            <div class="avatar">
+                <a href="{{ url_for('profile') }}">{{ username[:2].upper() if username else 'PR' }}</a>
+            </div>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="flash-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="form-card">
+        <div class="card-header">
+            <h2>Add Expense</h2>
+            <p>Record your spending to track where your money goes</p>
+        </div>
+
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('add_expense') }}">
+                <div class="row-2cols">
+                    <div class="form-group">
+                        <label>Period</label>
+                        <select name="period" required>
+                            <option value="Daily">Daily</option>
+                            <option value="Monthly" selected>Monthly</option>
+                            <option value="Yearly">Yearly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" value="{{ today if today else '' }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <input type="text" name="category" placeholder="e.g., Dining, Groceries, Transport, Entertainment, Shopping" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" name="amount" step="0.01" placeholder="Enter amount in rupees" required min="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" placeholder="Optional - add notes about this expense" autocomplete="off">
+                </div>
+
+                <button type="submit" class="btn-submit">Save Expense</button>
+            </form>
+
+            <div class="info-note">
+                 Tip: Categorizing expenses accurately helps your AI assistant provide better insights and spending predictions. Regular tracking leads to better financial decisions.
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

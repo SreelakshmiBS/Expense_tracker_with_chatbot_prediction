@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartExpenseAI | Register</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --gold: #c9a96e;
+      --gold-dk: #9d7c47;
+      --gold-bg: #f5eedf;
+      --t1: #1a1816;
+      --t2: #2d2b28;
+      --t3: #6b6560;
+      --t4: #a8a29c;
+      --border-s: #f0ede6;
+      --border-l: #e8e6e0;
+      --sh-sm: 0 8px 20px rgba(0, 0, 0, 0.05);
+      --r: 40px;
+    }
+
+    body {
+      background: #ffffff;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      color: var(--t1);
+      line-height: 1.5;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px) saturate(1.5);
+      -webkit-backdrop-filter: blur(20px) saturate(1.5);
+      background: rgba(255, 255, 255, 0.78);
+      border-bottom: 1px solid var(--border-s);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled {
+      box-shadow: var(--sh-sm);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 62px;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--t1);
+      text-decoration: none;
+      letter-spacing: -.3px;
+    }
+    .nav-brand span {
+      color: var(--gold);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+    .nav-links a {
+      padding: 6px 14px;
+      border-radius: var(--r);
+      font-size: 13.5px;
+      font-weight: 400;
+      color: var(--t3);
+      text-decoration: none;
+      transition: all .15s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--gold-dk);
+      background: var(--gold-bg);
+    }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .nav-login {
+      font-size: 13.5px;
+      color: var(--t3);
+      text-decoration: none;
+      padding: 6px 12px;
+      transition: color .15s;
+    }
+    .nav-login:hover {
+      color: var(--t1);
+    }
+    .btn-gold {
+      background: var(--gold);
+      border: none;
+      padding: 6px 16px;
+      border-radius: var(--r);
+      font-weight: 500;
+      font-size: 13.5px;
+      color: var(--t1);
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .btn-gold:hover {
+      background: #e0c27a;
+    }
+
+    /* Hero Section Luxury fintech */
+    .hero {
+      background: #fafaf8;
+      margin: 5rem 1.5rem 2rem 1.5rem;
+      border-radius: 2rem;
+      padding: 3rem 2rem;
+      text-align: center;
+      border: 1px solid var(--border-s);
+    }
+
+    .hero-content {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--t1);
+      margin-bottom: 1rem;
+    }
+
+    .hero-gold {
+      color: var(--gold);
+    }
+
+    .hero-content p {
+      font-size: 1.125rem;
+      color: var(--t3);
+    }
+
+    /* Register Card */
+    .register-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 1.5rem 4rem;
+    }
+
+    .register-card {
+      background: #ffffff;
+      max-width: 520px;
+      width: 100%;
+      border-radius: 2rem;
+      border: 1px solid var(--border-s);
+      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05);
+      padding: 2rem 2rem 2.5rem;
+    }
+
+    .register-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .register-header h2 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--t1);
+      letter-spacing: -0.3px;
+    }
+
+    .gold-line {
+      width: 60px;
+      height: 3px;
+      background: var(--gold);
+      margin: 0.75rem auto 0.5rem;
+      border-radius: 2px;
+    }
+
+    /* Form styling */
+    .register-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--t2);
+      margin-left: 0.25rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      background: #fafaf8;
+      border: 1.5px solid var(--border-s);
+      border-radius: 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--t1);
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: var(--gold);
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
+    }
+
+    .input-field::placeholder {
+      color: var(--t4);
+      font-weight: 400;
+    }
+
+    .register-button {
+      background: var(--gold);
+      border: none;
+      padding: 1rem;
+      border-radius: 3rem;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--t1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      font-family: inherit;
+    }
+
+    .register-button:hover {
+      background: #e0c27a;
+    }
+
+    .login-redirect {
+      text-align: center;
+      margin-top: 1.8rem;
+      font-size: 0.9rem;
+      color: var(--t3);
+    }
+
+    .login-redirect a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-redirect a:hover {
+      color: var(--gold-dk);
+      text-decoration: underline;
+    }
+
+    footer {
+      background: #fafaf8;
+      border-top: 1px solid var(--border-s);
+      padding: 1.8rem;
+      text-align: center;
+      color: var(--t4);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 700px) {
+      .nav-inner {
+        padding: 0 1rem;
+      }
+      .nav-links {
+        display: none;
+      }
+      .hero-content h1 {
+        font-size: 2.2rem;
+      }
+      .register-card {
+        padding: 1.5rem;
+      }
+      .hero {
+        margin: 5rem 1rem 2rem 1rem;
+        padding: 2rem 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV updated with exact provided structure -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">Smart<span>Expense</span>AI</a>
+    
+    <div class="nav-right">
+      <a href="{{ url_for('login') }}" class="nav-login">Log in</a>
+      <a href="{{ url_for('register') }}" class="btn-gold">Get Started</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Intelligent finance, <span class="hero-gold">redefined</span></h1>
+    <p>AI-driven insights, real-time tracking, and complete control.</p>
+  </div>
+</section>
+
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h2>Register</h2>
+      <div class="gold-line"></div>
+    </div>
+
+        <form method="POST" class="register-form">
+
+    <!-- Username -->
+    <div class="input-group">
+        <label>Username</label>
+        <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            class="input-field"
+            required>
+    </div>
+
+    <!-- Employment Type -->
+<div class="input-group">
+  <label>Employment Type</label>
+  <select name="employment_type" id="employment_type" class="input-field" required>
+    <option value="">Select Employment Type</option>
+    <option value="Employee">Employee</option>
+    <option value="Student">Student</option>
+    <option value="Business">Business</option>
+    <option value="Unemployed">Unemployed</option>
+    <option value="Home Maker">Home Maker</option>
+    <option value="Retired">Retired</option>
+    <option value="Other">Other</option>
+  </select>
+</div>
+
+<!-- Job Title -->
+<div class="input-group" id="job_group" style="display:none;">
+  <label>Job Title</label>
+  <input type="text" name="job_title" class="input-field">
+</div>
+
+<!-- Salary -->
+<div class="input-group" id="salary_group" style="display:none;">
+  <label>Monthly Salary</label>
+  <input type="number" name="monthly_salary" class="input-field">
+</div>
+
+    <!-- Email -->
+    <div class="input-group">
+        <label>Email</label>
+        <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            class="input-field"
+            required>
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+        <label>Password</label>
+        <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            class="input-field"
+            required>
+    </div>
+
+    <button type="submit" class="register-button">
+        Create Account
+    </button>
+
+</form>
+
+    <div class="login-redirect">
+      Already have an account? <a href="{{ url_for('login') }}">Sign in</a>
+    </div>
+  </div>
+</div>
+<script>
+  const empType = document.getElementById("employment_type");
+  const jobGroup = document.getElementById("job_group");
+  const salaryGroup = document.getElementById("salary_group");
+
+  function toggleEmploymentFields() {
+    if (empType.value === "Employee") {
+      jobGroup.style.display = "flex";
+      salaryGroup.style.display = "flex";
+    } else {
+      jobGroup.style.display = "none";
+      salaryGroup.style.display = "none";
+
+      // clear values so backend won't get empty strings
+      jobGroup.querySelector("input").value = "";
+      salaryGroup.querySelector("input").value = "";
+    }
+  }
+
+  empType.addEventListener("change", toggleEmploymentFields);
+
+  // run on page load (important if user refreshes)
+  toggleEmploymentFields();
+ 
+document.addEventListener("DOMContentLoaded", function () {
+    const emp = document.getElementById("employment_type");
+    const job = document.getElementById("job_title_group");
+    const sal = document.getElementById("salary_group");
+
+    function toggle() {
+        if (emp.value === "Employee") {
+            job.style.display = "flex";
+            sal.style.display = "flex";
+        } else {
+            job.style.display = "none";
+            sal.style.display = "none";
+        }
+    }
+
+    emp.addEventListener("change", toggle);
+    toggle();
+});
+</script>
+</body>
+</html>
