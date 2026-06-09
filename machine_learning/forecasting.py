@@ -463,7 +463,7 @@ def predict(mysql, user_id, days):
     # ==========================================
     if daily is None:
 
-        print("[FORECAST] ❌ No data available")
+        print("[FORECAST]  No data available")
 
         return {
             "amount": 0,

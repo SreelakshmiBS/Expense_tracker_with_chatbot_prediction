@@ -45,15 +45,14 @@ app.secret_key = os.getenv("SECRET_KEY")
 # app.config['MYSQL_CHARSET']  = 'utf8mb4'         # Full Unicode support (handles emojis too)
 
 #for production
-import os
+from config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 
-app.config['MYSQL_HOST']     = os.getenv('MYSQL_HOST')
-app.config['MYSQL_PORT']     = int(os.getenv('MYSQL_PORT', 3306))
-app.config['MYSQL_USER']     = os.getenv('MYSQL_USER')
-app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD')
-app.config['MYSQL_DB']       = os.getenv('MYSQL_DB')
-app.config['MYSQL_CHARSET']  = 'utf8mb4'
-app.config['MYSQL_UNIX_SOCKET'] = None
+app.config['MYSQL_HOST'] = MYSQL_HOST
+app.config['MYSQL_PORT'] = MYSQL_PORT
+app.config['MYSQL_USER'] = MYSQL_USER
+app.config['MYSQL_PASSWORD'] = MYSQL_PASSWORD
+app.config['MYSQL_DB'] = MYSQL_DB
+app.config['MYSQL_CHARSET'] = 'utf8mb4'
 # Bind the MySQL extension to our Flask app
 mysql = MySQL(app)
 
@@ -350,18 +349,25 @@ def register():
 
         # Pull all the fields the user filled in
         username        = request.form['username']
-        employment_type = request.form['employment_type']
+        employee_type = request.form['employee_type']
         email           = request.form['email']
         password        = request.form['password']
 
         # Job title and salary only apply to employees, not self-employed users
-        if employment_type == 'Employee':
-            job_title      = request.form.get('job_title')
-            monthly_salary = request.form.get('monthly_salary')
-        else:
-            job_title      = None  # Not relevant for other employment types
-            monthly_salary = None
+        if employee_type == 'Employee':
+            job_title = request.form.get('job_title')
 
+            monthly_salary = request.form.get('monthly_salary')
+
+            # FIX: handle None + empty string safely
+            if not monthly_salary or monthly_salary.strip() == '':
+                monthly_salary = 0
+            else:
+                monthly_salary = float(monthly_salary)
+
+        else:
+            job_title = None
+            monthly_salary = 0
         # Never store plain-text passwords — hash them first
         hashed_password = generate_password_hash(password)
 
@@ -369,9 +375,9 @@ def register():
         cur = mysql.connection.cursor()
         cur.execute("""
             INSERT INTO users
-                (username, employment_type, job_title, monthly_salary, email, password)
+                (username, employee_type, job_title, monthly_salary, email, password)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, (username, employment_type, job_title, monthly_salary, email, hashed_password))
+        """, (username, employee_type, job_title, monthly_salary, email, hashed_password))
         mysql.connection.commit()  # Persist the insert
         cur.close()
 
@@ -1044,7 +1050,7 @@ def profile():
 
     cur = mysql.connection.cursor()
     cur.execute("""
-        SELECT username, email, employment_type, job_title, monthly_salary, created_at, last_login
+        SELECT username, email, employee_type, job_title, monthly_salary, created_at, last_login
         FROM users
         WHERE id=%s
     """, (session['user_id'],))
@@ -1068,10 +1074,10 @@ def edit_profile():
 
     if request.method == 'POST':
         username        = request.form['username']
-        employment_type = request.form['employment_type']
+        employee_type = request.form['employee_type']
 
         # Job title and salary only matter for employees
-        if employment_type == 'Employee':
+        if employee_type == 'Employee':
             job_title      = request.form.get('job_title')
             monthly_salary = request.form.get('monthly_salary') or None  # Store NULL if blank
         else:
@@ -1081,9 +1087,9 @@ def edit_profile():
         # Update the user's record in the database
         cur.execute("""
             UPDATE users
-            SET username=%s, employment_type=%s, job_title=%s, monthly_salary=%s
+            SET username=%s, employee_type=%s, job_title=%s, monthly_salary=%s
             WHERE id=%s
-        """, (username, employment_type, job_title, monthly_salary, session['user_id']))
+        """, (username, employee_type, job_title, monthly_salary, session['user_id']))
         mysql.connection.commit()
 
         # Keep the session username in sync so the navbar shows the new name immediately
@@ -1093,7 +1099,7 @@ def edit_profile():
 
     # GET — load current values so the form isn't blank
     cur.execute(
-        "SELECT username, employment_type, job_title, monthly_salary FROM users WHERE id=%s",
+        "SELECT username, employee_type, job_title, monthly_salary FROM users WHERE id=%s",
         (session['user_id'],)
     )
     user = cur.fetchone()
@@ -1703,6 +1709,7 @@ def clear_chat():
     cur.close()
 
     return jsonify({"success": True})
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -343,7 +343,7 @@
     <!-- Employment Type -->
 <div class="input-group">
   <label>Employment Type</label>
-  <select name="employment_type" id="employment_type" class="input-field" required>
+  <select name="employee_type" id="employee_type" class="input-field" required>
     <option value="">Select Employment Type</option>
     <option value="Employee">Employee</option>
     <option value="Student">Student</option>
@@ -401,7 +401,7 @@
   </div>
 </div>
 <script>
-  const empType = document.getElementById("employment_type");
+  const empType = document.getElementById("employee_type");
   const jobGroup = document.getElementById("job_group");
   const salaryGroup = document.getElementById("salary_group");
 
@@ -425,7 +425,7 @@
   toggleEmploymentFields();
  
 document.addEventListener("DOMContentLoaded", function () {
-    const emp = document.getElementById("employment_type");
+    const emp = document.getElementById("employee_type");
     const job = document.getElementById("job_title_group");
     const sal = document.getElementById("salary_group");
 
