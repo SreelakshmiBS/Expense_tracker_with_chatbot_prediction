@@ -335,11 +335,10 @@ def register():
 
     return render_template('register.html')
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email    = request.form['email']
+        email = request.form['email']
         password = request.form['password']
 
         cur = mysql.connection.cursor()
@@ -348,15 +347,11 @@ def login():
         cur.close()
 
         if user:
-            # FIX: fetch the actual column index for password by name
-            # Schema: id(0), username(1), employee_type(2), job_title(3),
-            #         monthly_salary(4), email(5), password(6), created_at(7)
-            # Use index 6 for password. If your schema differs, adjust below.
-            stored_hash = user[6]
+            stored_hash = user[3]   # password column
 
             if check_password_hash(stored_hash, password):
-                session['user_id']  = user[0]   # id
-                session['username'] = user[1]   # username
+                session['user_id'] = user[0]
+                session['username'] = user[1]
                 return redirect(url_for('dashboard'))
 
             return "Invalid Password"
@@ -364,7 +359,6 @@ def login():
         return "User Not Found"
 
     return render_template('login.html')
-
 
 @app.route('/logout')
 def logout():
