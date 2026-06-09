@@ -94,7 +94,7 @@ def save_to_database(mysql, user_id, txn_type: str, amount: float,
         mysql.connection.commit()   # Flush the insert to disk
         cur.close()
 
-        log.info("[DB] Saved transaction successfully!")
+        log.info("[DB] ✅ Saved transaction successfully!")
 
         # Feed this labelled example to the ML training dataset
         append_to_dataset(description, amount, txn_type, category)
@@ -102,7 +102,7 @@ def save_to_database(mysql, user_id, txn_type: str, amount: float,
         return True
 
     except Exception as e:
-        log.error("[DB] Save failed: %s", e)
+        log.error("[DB] ❌ Save failed: %s", e)
         return False
 
 
@@ -239,13 +239,13 @@ def get_budget_warnings(mysql, user_id) -> list:
         if pct >= 100:
             # Over budget — critical alert
             warnings.append(
-                f" {category.title()} budget EXCEEDED! "
+                f"🚨 {category.title()} budget EXCEEDED! "
                 f"Spent ₹{spent:,.2f} of ₹{budget_amount:,.2f} ({pct:.0f}%) [{period}]"
             )
         elif pct >= 80:
             # Approaching the limit — caution alert
             warnings.append(
-                f"{category.title()} budget at {pct:.0f}% — "
+                f"⚠️  {category.title()} budget at {pct:.0f}% — "
                 f"₹{budget_amount - spent:,.2f} remaining [{period}]"
             )
 
@@ -279,7 +279,7 @@ def save_goal(mysql, user_id, goal_name: str, target_amount: float,
         )
         mysql.connection.commit()
         cur.close()
-        log.info("[GOAL-DB]  Goal saved!")
+        log.info("[GOAL-DB] ✅ Goal saved!")
         return True
 
     except Exception as e:
@@ -403,7 +403,7 @@ def _goal_progress_line(goal_name, target_amount, current_amount) -> str:
     Used by _view_goals() to format each goal consistently.
 
     Example output:
-       Bike               [████████████░░░░░░░░] 60.0%
+      🎯 Bike               [████████████░░░░░░░░] 60.0%
            ₹60,000.00 saved  |  ₹40,000.00 to go
     """
     target    = float(target_amount)
@@ -421,7 +421,7 @@ def _goal_progress_line(goal_name, target_amount, current_amount) -> str:
     remaining = max(target - current, 0)
 
     return (
-        f"   {goal_name.title():<18} [{bar}] {pct:5.1f}%\n"
+        f"  🎯 {goal_name.title():<18} [{bar}] {pct:5.1f}%\n"
         f"     ₹{current:>10,.2f} saved  |  ₹{remaining:>10,.2f} to go"
     )
 
@@ -542,14 +542,14 @@ class ChatbotEngine:
         # ── Generic greeting / help ────────────────────────────────────────────
         elif intent == "chat":
             return (
-                f"👋 Hi {username}!!! I'm your SmartExpenseAI Financial Assistant.\n\n"
+                f"👋 Hi {username}! I'm SmartExpenseAI.\n\n"
                 "Here's what I can do:\n"
-                "  Track expenses    → 'I spent 300 on pizza'\n"
-                "  Record income     → 'Got salary 50000'\n"
-                "  Analytics         → 'show analytics'\n"
-                "  List expenses     → 'show expenses'\n"
-                "  Budgets           → 'set budget for food 5000 monthly'\n"
-                "  Goals             → 'save 100000 for bike'\n\n"
+                "  💸 Track expenses    → 'I spent 300 on pizza'\n"
+                "  💰 Record income     → 'Got salary 50000'\n"
+                "  📊 Analytics         → 'show analytics'\n"
+                "  📋 List expenses     → 'show expenses'\n"
+                "  🏦 Budgets           → 'set budget for food 5000 monthly'\n"
+                "  🎯 Goals             → 'save 100000 for bike'\n\n"
                 "What would you like to do?"
             )
 
@@ -562,7 +562,7 @@ class ChatbotEngine:
 
             # Give up and show helpful examples
             return (
-                " I didn't quite understand that.\n\n"
+                "🤔 I didn't quite understand that.\n\n"
                 "Try saying:\n"
                 "  • 'I spent 300 on pizza'\n"
                 "  • 'Got salary 50000'\n"
