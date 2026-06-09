@@ -101,7 +101,7 @@ def call_openrouter(user_message: str, intent: str = "unknown") -> str:
                 "Content-Type":  "application/json",
             },
             json={
-                "model":       "google/gemini-2.0-flash-exp:free",
+                "model": "google/gemini-2.5-flash-lite",
                 "messages": [
                     {"role": "system", "content": system_prompt},
                     {"role": "user",   "content": user_message},
