@@ -36,67 +36,113 @@
             line-height: 1.5;
         }
 
-        /* Navigation */
-        nav {
-            background: rgba(255,255,255,.95);
-            border-bottom: 1px solid var(--border-s);
+        /* ========== FIXED & IMPROVED HEADER / NAVIGATION ========== */
+        .navbar {
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
+            backdrop-filter: blur(2px);
         }
-        .nav-inner {
+
+        .nav-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 60px;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
+            height: 68px;
         }
-        .nav-brand {
-            font-size: 18px;
+
+        /* Brand logo */
+        .brand {
+            font-size: 20px;
             font-weight: 700;
-            color: var(--t1);
+            letter-spacing: -0.3px;
             text-decoration: none;
+            color: var(--t1);
+            transition: opacity 0.2s;
         }
-        .nav-brand span {
+        .brand span {
             color: var(--gold);
+            font-weight: 800;
         }
-        .nav-links {
+        .brand:hover {
+            opacity: 0.85;
+        }
+
+        /* Right side group: analytics + avatar + logout */
+        .nav-right {
             display: flex;
-            gap: 20px;
-            list-style: none;
+            align-items: center;
+            gap: 24px;
         }
-        .nav-links a {
+
+        /* Analytics button (refined) */
+        .analytics-btn {
             text-decoration: none;
             font-size: 14px;
-            color: var(--t3);
+            font-weight: 500;
+            color: var(--t2);
+            background: transparent;
+            padding: 6px 12px;
+            border-radius: 30px;
+            transition: all 0.2s;
         }
-        .nav-links a:hover {
+        .analytics-btn:hover {
+            background: var(--gold-bg);
             color: var(--gold-dk);
         }
-        .btn-sm {
+
+        /* Avatar circle */
+        .avatar a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
             background: var(--gold);
-            padding: 6px 16px;
-            border-radius: 30px;
+            color: var(--t1);
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .avatar a:hover {
+            background: var(--gold-dk);
+            color: white;
+            transform: scale(1.02);
+        }
+
+        /* Logout button (subtle but clear) */
+        .logout-btn {
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
-            color: var(--t1);
+            background: var(--bg-off);
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: var(--t3);
+            transition: all 0.2s;
         }
-        .btn-sm:hover {
-            background: var(--gold-dk);
+        .logout-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
             color: white;
         }
 
-        /* Container */
+        /* Container and rest of layout (unchanged but polished) */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 32px 24px;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -126,13 +172,13 @@
             font-size: 14px;
             color: var(--t1);
             display: inline-block;
+            transition: all 0.2s;
         }
         .btn-add:hover {
             background: var(--gold-dk);
             color: white;
         }
 
-        /* Table */
         .table-wrapper {
             background: var(--bg);
             border: 1px solid var(--border);
@@ -165,8 +211,6 @@
         tr:hover td {
             background: var(--bg-off);
         }
-
-        /* Badge */
         .badge {
             background: var(--gold-bg);
             padding: 4px 12px;
@@ -176,8 +220,6 @@
             color: var(--gold-dk);
             display: inline-block;
         }
-
-        /* Progress bar */
         .progress-cell {
             min-width: 130px;
         }
@@ -209,8 +251,6 @@
         .text-safe { color: var(--green); }
         .text-warning { color: var(--orange); }
         .text-danger { color: var(--red); }
-
-        /* Amounts */
         .amount {
             font-weight: 500;
         }
@@ -221,8 +261,6 @@
         .remaining.negative {
             color: var(--red);
         }
-
-        /* Action links */
         .actions {
             display: flex;
             gap: 12px;
@@ -250,8 +288,6 @@
             background: var(--red);
             color: white;
         }
-
-        /* Empty state */
         .empty {
             text-align: center;
             padding: 60px 24px;
@@ -283,20 +319,18 @@
         .btn-outline:hover {
             background: var(--gold-bg);
         }
-
-        /* Back link */
         .back-link {
             display: inline-block;
             color: var(--t3);
             text-decoration: none;
             font-size: 13px;
             margin-top: 8px;
+            margin-bottom: 0;
+            transition: color 0.2s;
         }
         .back-link:hover {
             color: var(--gold-dk);
         }
-
-        /* Footer */
         footer {
             text-align: center;
             padding: 24px;
@@ -305,7 +339,7 @@
             font-size: 12px;
             background: var(--bg);
         }
-
+        /* Small screen adjustments */
         @media (max-width: 700px) {
             .container {
                 padding: 20px 16px;
@@ -313,30 +347,45 @@
             .header h1 {
                 font-size: 24px;
             }
-            .nav-links {
+            .nav-container {
+                padding: 0 16px;
+                height: 60px;
+            }
+            .analytics-btn {
                 display: none;
+            }
+            .nav-right {
+                gap: 12px;
+            }
+            .logout-btn {
+                padding: 5px 10px;
+                font-size: 12px;
             }
         }
     </style>
 </head>
 <body>
 
+<!-- ========== CORRECTED HEADER: proper navbar with brand, analytics, avatar, logout ========== -->
 <nav class="navbar">
     <div class="nav-container">
         <a href="{{ url_for('dashboard') }}" class="brand">Smart<span>Expense</span>AI</a>
         <div class="nav-right">
             <a href="{{ url_for('analytics') }}" class="analytics-btn">Analytics</a>
             <div class="avatar">
-                <a href="{{ url_for('profile') }}">{{ username[:2].upper() if username else 'PR' }}</a>
+                <a href="{{ url_for('profile') }}" aria-label="Profile">{{ username[:2].upper() if username else 'PR' }}</a>
             </div>
             <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
         </div>
     </div>
 </nav>
-<div class="container">
+
+<!-- Back link (inside a wrapper but outside main container to match original layout) -->
+<div class="container" style="padding-bottom: 0;">
     <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
 </div>
 
+<!-- Main budgets section -->
 <main class="container">
     <div class="header">
         <div>
@@ -347,7 +396,6 @@
     </div>
 
     {% if budget_report and budget_report|length > 0 %}
-
     <div class="table-wrapper">
         <table>
             <thead>
@@ -404,17 +452,13 @@
             </tbody>
         </table>
     </div>
-
     {% else %}
-
     <div class="empty">
         <h3>No budgets yet</h3>
         <p>Create your first budget to start tracking expenses</p>
         <a href="{{ url_for('add_budget') }}" class="btn-outline">+ Create Budget</a>
     </div>
-
     {% endif %}
 </main>
-
 </body>
 </html>

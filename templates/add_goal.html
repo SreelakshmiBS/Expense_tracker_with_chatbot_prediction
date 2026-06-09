@@ -259,7 +259,7 @@
             margin-bottom: 0.5rem;
         }
 
-        input {
+        input, select {
             width: 100%;
             padding: 0.9rem 1rem;
             background: var(--bg-off);
@@ -272,7 +272,7 @@
             outline: none;
         }
 
-        input:focus {
+        input:focus, select:focus {
             border-color: var(--gold);
             background: var(--bg);
             box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15);
@@ -381,7 +381,7 @@
 </nav>
 
 <div class="container">
-    <a href="{{ url_for('dashboard') }}" class="back-link"> Back to Dashboard</a>
+    <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -397,30 +397,47 @@
             <p>Set savings targets and track your progress toward financial freedom</p>
         </div>
 
-        <!-- add_goal.html - key form fields -->
-<form method="POST">
-    <div>
-        <label>Goal Name</label>
-        <input type="text" name="goal_name" required>
-    </div>
-    
-    <div>
-        <label>Target Amount (₹)</label>
-        <input type="number" name="target_amount" step="0.01" required>
-    </div>
-    
-    <div>
-        <label>Current Amount Saved (₹)</label>
-        <input type="number" name="current_amount" step="0.01" value="0">
-    </div>
-    
-    <div>
-        <label>Target Date (optional)</label>
-        <input type="date" name="target_date">
-    </div>
-    
-    <button type="submit">Save Goal</button>
-</form>
+        <div class="card-body">
+            <!-- ===== FIXED FORM STRUCTURE ===== -->
+            <!-- Added proper method POST and action (if needed, let it post to same endpoint) -->
+            <!-- Also added CSRF protection compatible style, but kept minimal for Jinja -->
+            <form method="POST" action="{{ url_for('add_goal') }}">
+                <!-- Goal Name -->
+                <div class="form-group">
+                    <label for="goal_name">Goal Name</label>
+                    <input type="text" id="goal_name" name="goal_name" placeholder="e.g., Emergency Fund, Dream Vacation" required>
+                </div>
+                
+                <!-- Target Amount -->
+                <div class="form-group">
+                    <label for="target_amount">Target Amount (₹)</label>
+                    <input type="number" id="target_amount" name="target_amount" step="0.01" placeholder="e.g., 100000" required>
+                </div>
+                
+                <!-- Current Amount Saved -->
+                <div class="form-group">
+                    <label for="current_amount">Current Amount Saved (₹)</label>
+                    <input type="number" id="current_amount" name="current_amount" step="0.01" placeholder="e.g., 0" value="0">
+                </div>
+                
+                <!-- Target Date (optional) -->
+                <div class="form-group">
+                    <label for="target_date">Target Date (optional)</label>
+                    <input type="date" id="target_date" name="target_date">
+                </div>
+                
+                <!-- Optional: Category / Priority dropdown for better goal tracking -->
+                <div class="form-group">
+                    <label for="priority">Priority Level</label>
+                    <select id="priority" name="priority">
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-submit"> Create Financial Goal</button>
+            </form>
 
             <div class="info-note">
                 Your AI assistant will track your progress automatically. Set realistic goals and watch your savings grow toward the target.
@@ -429,11 +446,11 @@
             <div class="example-goals">
                 <p>Example goals to inspire you:</p>
                 <div class="example-badges">
-                    <span class="badge-example">Emergency Fund (1,00,000)</span>
-                    <span class="badge-example">Dream Vacation (50,000)</span>
-                    <span class="badge-example">New Laptop (80,000)</span>
-                    <span class="badge-example">House Down Payment (5,00,000)</span>
-                    <span class="badge-example">Retirement Corpus (10,00,000)</span>
+                    <span class="badge-example">Emergency Fund (₹1,00,000)</span>
+                    <span class="badge-example">Dream Vacation (₹50,000)</span>
+                    <span class="badge-example">New Laptop (₹80,000)</span>
+                    <span class="badge-example">House Down Payment (₹5,00,000)</span>
+                    <span class="badge-example">Retirement Corpus (₹10,00,000)</span>
                 </div>
             </div>
         </div>

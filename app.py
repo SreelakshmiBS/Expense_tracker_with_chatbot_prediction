@@ -1,6 +1,4 @@
-
 # SmartExpenseAI — Main Flask Application
-
 # --- Standard library imports ---
 from datetime import date, datetime, timedelta
 import os
@@ -32,18 +30,6 @@ app = Flask(__name__)
 # Secret key used to sign session cookies — keep this private in production
 app.secret_key = os.getenv("SECRET_KEY")
 
-
-# ============================================================
-# Database Configuration
-# ============================================================
-
-# for local development
-# app.config['MYSQL_HOST']     = 'localhost'       # MySQL is running on the same machine
-# app.config['MYSQL_USER']     = 'root'            # Database username
-# app.config['MYSQL_PASSWORD'] = 'Sree@2611'       # Database password
-# app.config['MYSQL_DB']       = 'expense_tracker' # The database we're working with
-# app.config['MYSQL_CHARSET']  = 'utf8mb4'         # Full Unicode support (handles emojis too)
-
 #for production
 from config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB
 
@@ -58,7 +44,6 @@ mysql = MySQL(app)
 
 # Create one shared chatbot engine and pass the DB connection to it
 chatbot_engine = ChatbotEngine(mysql)
-
 
 @app.route('/test-db')
 def test_db():
@@ -173,7 +158,6 @@ def generate_ai_insights(total_income, total_expense, savings,
 
     return insights
 
-
 def calculate_budget_alerts(budget_report):
     """
     Enriches budget_report dicts with an alert_level key:
@@ -191,7 +175,6 @@ def calculate_budget_alerts(budget_report):
         else:
             b["alert_level"] = "safe"
     return budget_report
-
 
 def calculate_health_score(total_income, total_expense,
                             savings, budget_report):
@@ -456,11 +439,6 @@ def dashboard():
     user_id = session['user_id']
     today   = date.today()
 
-    print("\n=================================================")
-    print("DASHBOARD LOADED")
-    print("=================================================")
-    print(f"[DASHBOARD] User ID: {user_id}")
-
     # ----------------------------------------------------------
     # How long has this user been tracking?
     # ----------------------------------------------------------
@@ -477,7 +455,7 @@ def dashboard():
     # Calculate how many days have passed since that first transaction
     days_tracked = (today - first_date).days if first_date else 0
 
-    print(f"[DASHBOARD] Days tracked: {days_tracked}")
+    print(f"[DASHBOARD] Days tracked: {days_tracked}") #debugging
 
     # ----------------------------------------------------------
     # Today's income and expense totals
