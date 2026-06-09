@@ -53,17 +53,13 @@ def get_model_path(user_id):
 # ==============================================================================
 def save_model(model, user_id):
 
-    print("\n=================================================")
-    print("💾 SAVING MODEL")
-    print("=================================================")
-
     path = get_model_path(user_id)
 
     try:
 
         joblib.dump(model, path)
 
-        print(f"[FORECAST] ✅ Model saved: {path}")
+        print(f"[FORECAST]  Model saved: {path}")
 
     except Exception as e:
 
@@ -74,10 +70,6 @@ def save_model(model, user_id):
 # LOAD MODEL
 # ==============================================================================
 def load_model(user_id):
-
-    print("\n=================================================")
-    print("📂 LOADING SAVED MODEL")
-    print("=================================================")
 
     path = get_model_path(user_id)
 
@@ -91,7 +83,7 @@ def load_model(user_id):
 
         model = joblib.load(path)
 
-        print(f"[FORECAST] ✅ Model loaded: {path}")
+        print(f"[FORECAST]  Model loaded: {path}")
 
         return model
 
@@ -106,10 +98,6 @@ def load_model(user_id):
 # DELETE MODEL  (call when user resets / deletes their data)
 # ==============================================================================
 def delete_model(user_id):
-
-    print("\n=================================================")
-    print("🗑️  DELETING SAVED MODEL")
-    print("=================================================")
 
     path = get_model_path(user_id)
 
@@ -134,11 +122,6 @@ def delete_model(user_id):
 # LOAD USER TRANSACTIONS
 # ==============================================================================
 def load_user_transactions(mysql, user_id):
-
-    print("\n=================================================")
-    print("📥 LOADING USER TRANSACTIONS")
-    print("=================================================")
-
     print(f"[FORECAST] User ID: {user_id}")
 
     try:
@@ -189,7 +172,7 @@ def load_user_transactions(mysql, user_id):
             "transaction_date"
         ])
 
-        print("[FORECAST] ✅ DataFrame created")
+        print("[FORECAST]  DataFrame created")
 
         print("\n[FORECAST] FIRST 5 ROWS:")
 
@@ -212,10 +195,6 @@ def load_user_transactions(mysql, user_id):
 # PREPROCESS DATA
 # ==============================================================================
 def prepare_data(mysql, user_id):
-
-    print("\n=================================================")
-    print("🧹 PREPROCESSING DATA")
-    print("=================================================")
 
     df = load_user_transactions(mysql, user_id)
 
