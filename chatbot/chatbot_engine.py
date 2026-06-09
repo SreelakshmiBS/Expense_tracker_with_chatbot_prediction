@@ -630,7 +630,7 @@ class ChatbotEngine:
 
         if saved:
             reply = (
-                f"   Expense recorded!\n"
+                f"✅ Expense recorded!\n"
                 f"   Amount      : ₹{amount:,.2f}\n"
                 f"   Description : {description.title()}\n"
                 f"   Category    : {category.title()}\n"
@@ -665,14 +665,14 @@ class ChatbotEngine:
         # ── Need an amount first ───────────────────────────────────────────────
         if not amount or amount <= 0:
             self.state.start_flow(user_id, "income")
-            return " How much income did you receive? (e.g. 50000, 25k)"
+            return "💰 How much income did you receive? (e.g. 50000, 25k)"
 
         # ── Need to know the income source ────────────────────────────────────
         if not description or len(description) < 2:
             self.state.start_flow(user_id, "income")
             self.state.save_data(user_id, "amount", amount)
             self.state.save_data(user_id, "date", txn_date)
-            return f" What was this ₹{amount:,.0f} income for? (e.g. salary, freelance)"
+            return f"💼 What was this ₹{amount:,.0f} income for? (e.g. salary, freelance)"
 
         # ── Predict category if not found in the message ───────────────────────
         if not category:
@@ -688,7 +688,7 @@ class ChatbotEngine:
 
         if saved:
             return (
-                f" Income recorded!\n"
+                f"✅ Income recorded!\n"
                 f"   Amount      : ₹{amount:,.2f}\n"
                 f"   Description : {description.title()}\n"
                 f"   Category    : {category.title()}\n"
@@ -737,14 +737,14 @@ class ChatbotEngine:
         if not amount or amount <= 0:
             self.state.start_flow(user_id, "budget")
             self.state.save_data(user_id, "category", category)   # Hold category for next step
-            return f" How much should the {category.title()} budget be?"
+            return f"💵 How much should the {category.title()} budget be?"
 
         # ── Ask for period if missing ──────────────────────────────────────────
         if not period:
             self.state.start_flow(user_id, "budget")
             self.state.save_data(user_id, "category", category)
             self.state.save_data(user_id, "amount", amount)
-            return " Should this be weekly, monthly, or yearly?"
+            return "🗓️ Should this be weekly, monthly, or yearly?"
 
         # We have everything — save it
         return self._save_budget_and_reply(user_id, category, amount, period)
@@ -768,13 +768,13 @@ class ChatbotEngine:
         # ── Need to know which category to update ─────────────────────────────
         if not category:
             self.state.start_flow(user_id, "update_budget")
-            return " Which budget category would you like to update?"
+            return "✏️ Which budget category would you like to update?"
 
         # ── Need a new amount ──────────────────────────────────────────────────
         if not amount or amount <= 0:
             self.state.start_flow(user_id, "update_budget")
             self.state.save_data(user_id, "category", category)
-            return f What should the new amount be for your {category.title()} budget?"
+            return f"💵 What should the new amount be for your {category.title()} budget?"
 
         # Use 'monthly' as a safe default if no period was mentioned
         if not period:
@@ -796,11 +796,11 @@ class ChatbotEngine:
 
         if not category:
             self.state.start_flow(user_id, "delete_budget")
-            return " Which budget category would you like to delete?"
+            return "🗑️ Which budget category would you like to delete?"
 
         deleted = delete_budget(self.mysql, user_id, category)
         if deleted:
-            return f" {category.title()} budget deleted successfully."
+            return f"✅ {category.title()} budget deleted successfully."
 
         # Nothing was deleted — the category probably doesn't exist
         return f"⚠️ No budget found for '{category}'. Check 'show budgets' for your list."
@@ -866,7 +866,7 @@ class ChatbotEngine:
         if saved:
             verb = "updated" if is_update else "set"
             return (
-                f"   Budget {verb}!\n"
+                f"✅ Budget {verb}!\n"
                 f"   Category : {category.title()}\n"
                 f"   Amount   : ₹{amount:,.2f}\n"
                 f"   Period   : {period.title()}\n\n"
@@ -967,7 +967,7 @@ class ChatbotEngine:
 
         if not goal_name:
             self.state.start_flow(user_id, "update_goal")
-            return " Which goal would you like to update?"
+            return "✏️ Which goal would you like to update?"
 
         if not target_amount or target_amount <= 0:
             self.state.start_flow(user_id, "update_goal")
@@ -978,7 +978,7 @@ class ChatbotEngine:
 
         if updated:
             return (
-                f"   Goal updated!\n"
+                f"✅ Goal updated!\n"
                 f"   Goal       : {goal_name.title()}\n"
                 f"   New Target : ₹{target_amount:,.2f}"
             )
@@ -1080,7 +1080,7 @@ class ChatbotEngine:
 
         if saved:
             reply = (
-                f" Goal created!\n"
+                f"✅ Goal created!\n"
                 f"   Goal   : {goal_name.title()}\n"
                 f"   Target : ₹{target_amount:,.2f}\n"
             )
@@ -1471,7 +1471,7 @@ class ChatbotEngine:
 
             # ── Build the output line by line ──────────────────────────────────
             lines = [
-                "Your Financial Summary",
+                "📊 Your Financial Summary",
                 "─" * 42,
                 f"  💰 Total Income    : ₹{total_income:>12,.2f}",
                 f"  💸 Total Expenses  : ₹{total_expense:>12,.2f}",
