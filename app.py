@@ -1028,7 +1028,7 @@ def profile():
 
     cur = mysql.connection.cursor()
     cur.execute("""
-        SELECT username, email, employee_type, job_title, monthly_salary, created_at, last_login
+        SELECT username, email, employee_type, job_title, monthly_salary, created_at
         FROM users
         WHERE id=%s
     """, (session['user_id'],))
