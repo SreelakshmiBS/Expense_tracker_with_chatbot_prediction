@@ -428,21 +428,13 @@ def get_model(mysql, user_id):
       4. Otherwise → retrain, save, and return the new model.
     """
 
-    print("\n=================================================")
-    print("🔍 FETCHING MODEL")
-    print("=================================================")
-
     saved = load_model(user_id)
 
     daily = prepare_data(mysql, user_id)
 
     if saved is not None and daily is not None and len(daily) >= 7:
 
-        print("[FORECAST] ✅ Using saved model")
-
         return saved, daily
-
-    print("[FORECAST] ℹ️ No valid saved model — retraining...")
 
     return train_model(mysql, user_id)
 
@@ -452,10 +444,6 @@ def get_model(mysql, user_id):
 # ==============================================================================
 def predict(mysql, user_id, days):
 
-    print("\n=================================================")
-    print(f"📊 PREDICTING NEXT {days} DAYS")
-    print("=================================================")
-
     model, daily = get_model(mysql, user_id)
 
     # ==========================================
@@ -463,7 +451,6 @@ def predict(mysql, user_id, days):
     # ==========================================
     if daily is None:
 
-        print("[FORECAST]  No data available")
 
         return {
             "amount": 0,
@@ -476,8 +463,6 @@ def predict(mysql, user_id, days):
     # VERY SMALL DATA  (< 7 days)
     # ==========================================
     if len(daily) < 7:
-
-        print("[FORECAST] Using average-based prediction")
 
         recent_avg = daily["total"].mean()
 
@@ -518,10 +503,6 @@ def predict(mysql, user_id, days):
         "day_index": [future_index]
     })
 
-    print("\n[FORECAST] Future Input:")
-
-    print(future)
-
     prediction = model.predict(future)[0]
 
     # ==========================================
@@ -536,8 +517,6 @@ def predict(mysql, user_id, days):
     prediction = max(0, prediction)
 
     prediction = round(prediction, 2)
-
-    print(f"[FORECAST] Final Prediction: {prediction}")
 
     avg_transactions = max(1, round(days * 0.8))
 
@@ -557,21 +536,13 @@ def predict(mysql, user_id, days):
 # ==============================================================================
 def get_trend(mysql, user_id):
 
-    print("\n=================================================")
-    print("📈 ANALYZING TREND")
-    print("=================================================")
-
     model, daily = get_model(mysql, user_id)
 
     if model is None:
 
-        print("[FORECAST] ❌ No trend available")
-
         return "AI Learning"
 
     slope = model.coef_[0]
-
-    print(f"[FORECAST] Trend slope: {slope}")
 
     if slope > 50:
 
@@ -585,8 +556,6 @@ def get_trend(mysql, user_id):
 
         trend = "Spending Stable"
 
-    print(f"[FORECAST] Trend Result: {trend}")
-
     return trend
 
 
@@ -594,8 +563,6 @@ def get_trend(mysql, user_id):
 # NEXT DAY
 # ==============================================================================
 def next_day(mysql, user_id):
-
-    print("\n🚀 NEXT DAY FORECAST")
 
     return predict(mysql, user_id, 1)
 
@@ -605,8 +572,6 @@ def next_day(mysql, user_id):
 # ==============================================================================
 def weekly(mysql, user_id):
 
-    print("\n🚀 WEEKLY FORECAST")
-
     return predict(mysql, user_id, 7)
 
 
@@ -615,8 +580,6 @@ def weekly(mysql, user_id):
 # ==============================================================================
 def monthly(mysql, user_id):
 
-    print("\n🚀 MONTHLY FORECAST")
-
     return predict(mysql, user_id, 30)
 
 
@@ -624,8 +587,6 @@ def monthly(mysql, user_id):
 # YEARLY
 # ==============================================================================
 def yearly(mysql, user_id):
-
-    print("\n🚀 YEARLY FORECAST")
 
     return predict(mysql, user_id, 365)
 
