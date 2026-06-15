@@ -97,7 +97,7 @@ def predict_category(description: str, transaction_type: str) -> str:
 
     # ── Step 5: Predict ───────────────────────────────────────────────────────
     try:
-        prediction = model.predict([feature_text])
+        prediction = model.predict([feature_text]) #predict
         category   = str(prediction[0]).strip().lower()
         print(f"[ML DEBUG] Predicted category: '{category}'")
         return category

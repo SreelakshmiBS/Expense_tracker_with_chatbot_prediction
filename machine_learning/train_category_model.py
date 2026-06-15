@@ -3,7 +3,7 @@
 # ==============================================================================
 
 import os
-import joblib
+import joblib #used for saving
 import pandas as pd
 
 from sklearn.feature_extraction.text import TfidfVectorizer

@@ -11,7 +11,7 @@ BASE_DIR     = os.path.dirname(__file__)
 DATASET_PATH = os.path.join(BASE_DIR, "dataset", "transaction_dataset.csv")
 
 # ── Column names (unified schema) ─────────────────────────────────────────────
-CSV_COLUMNS = [                   # ✅ FIX A
+CSV_COLUMNS = [                   
     "description",
     "amount",
     "category",
